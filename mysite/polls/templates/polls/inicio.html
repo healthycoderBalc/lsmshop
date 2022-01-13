@@ -1,7 +1,7 @@
 {% extends "polls/principal.html" %}
 
 {% block content %}
-
+{% load static %} 
 
     <div class="row">
         {% for neg in negocios %}
@@ -11,7 +11,7 @@
                 <div class="card-header justify-content-end">
                     <i class="bi-heart" style="font-size: 1rem"></i>
                 </div>
-                <img src="http://cdn28.us1.fansshare.com/photograph/restaurantviews/restaurant-wallpaper-769058792.jpg" class="card-img-top">
+                <img src="{{ neg.fotoNegocio.url }}" class="card-img-top"/>
                 <div class="card-body">
                     <span class="card-title">{{ neg.nombre }}</span>
                     <p class="card-text">{{ neg.direccion }}</p>

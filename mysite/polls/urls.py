@@ -3,6 +3,9 @@ from django.urls import path, include
 
 from . import views
 from django.views.generic import TemplateView
+from django.conf import settings
+from django.conf.urls.static import static
+from .views import *
 
 
 
@@ -31,9 +34,6 @@ urlpatterns = [
      path('cargarNegocioHoraDia/', views.cargarNegocioHoraDia, name='cargarNegocioHoraDia'),
      path('cargarNegocioRubro/', views.cargarNegocioRubro, name='cargarNegocioRubro'),
      path('cargarNegocioFormaContacto/', views.cargarNegocioFormaContacto, name='cargarNegocioFormaContacto'),
-     
-     
-     
-
  
 ]
+

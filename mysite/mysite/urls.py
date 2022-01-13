@@ -18,6 +18,9 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import include, path, re_path
+from . import settings
+from django.contrib.staticfiles.urls import static
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 
 
@@ -31,3 +34,10 @@ urlpatterns = [
 
 
     # Python Social Auth URLs 
+
+
+if settings.DEBUG:
+        urlpatterns += staticfiles_urlpatterns()
+        urlpatterns += static(settings.MEDIA_URL,
+                              document_root=settings.MEDIA_ROOT)
+        

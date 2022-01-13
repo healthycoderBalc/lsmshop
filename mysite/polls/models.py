@@ -47,8 +47,8 @@ class ContactForm(models.Model):
 class Business(models.Model):
     nombre = models.CharField(max_length=200)
     direccion = models.CharField(max_length=200)
-    fotoNegocio = models.CharField(max_length=200)
-    fotoLogotipo = models.CharField(max_length=200)
+    fotoNegocio = models.ImageField(upload_to='images/')
+    fotoLogotipo = models.ImageField(upload_to='images/')
     cliente = models.ForeignKey(Client, on_delete=models.CASCADE)
     suscripcion = models.ForeignKey(Subscription, on_delete=models.CASCADE)
 

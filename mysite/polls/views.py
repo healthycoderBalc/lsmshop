@@ -82,12 +82,19 @@ def cargarNegocio(request):
     context ={}
  
     # add the dictionary during initialization
-    form = BusinessForm(request.POST or None)
-    if form.is_valid():
-        form.save()
+    if request.method == 'POST':
+        form = BusinessForm(request.POST or None, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('polls:principal')
+    else:
+        form = BusinessForm()
          
     context['form']= form
     return render(request, "polls/cargar.html", context)
+
+def success(request):
+    return HttpResponse('succesfully uploaded')
 
 def cargarNegocioHoraDia(request):
     # dictionary for initial data with
