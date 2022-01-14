@@ -63,7 +63,7 @@ class Businesshourday(models.Model):
     horaCierra = models.DateTimeField('horario de cierre')
 
     def __str__(self):
-        return self.negocio
+        return self.negocio.nombre
 
 
 class BusinessArea(models.Model):
@@ -71,7 +71,7 @@ class BusinessArea(models.Model):
     rubro = models.ForeignKey(Heading, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.negocio
+        return self.negocio.nombre
 
 
 
@@ -81,5 +81,5 @@ class BusinessContactForm(models.Model):
     datosContacto = models.CharField(max_length=200)
 
     def __str__(self):
-        return self.negocio
+        return self.negocio.nombre
 

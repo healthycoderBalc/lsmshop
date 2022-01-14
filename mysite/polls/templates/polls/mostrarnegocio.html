@@ -1,0 +1,43 @@
+{% extends "polls/principal.html" %}
+
+{% block title %}
+<title>{{titulo}}</title>
+{% endblock %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-12 col-md-6 mb-3">
+        <div class="card">
+            <div class="card-header justify-content-end">
+                <span class="card-title font-weight-bold"><b>{{ data.nombre }}</b></span>
+            </div>
+            <div class="card-body">
+                <span class="card-title"> <b>Dirección: </b> {{ data.direccion }}</span>
+                <img src="{{ data.fotoNegocio.url }}" class="card-img-top"/>
+                <img src="{{ data.fotoLogotipo.url }}" class="card-img-top"/>
+                <p><b>Rubros: </b></p>
+                <p>{% for rubro in rubros  %}
+                {{ rubro.rubro.nombre }}, 
+                {% endfor %}</p>
+
+                <p><b>Contacto: </b></p>
+                {% for contacto in contactos  %}
+                <p>{{ contacto.formaContacto.nombre }}
+                {{ contacto.datosContacto }} </p>
+                {% endfor %}
+
+                <p><b>Horario: </b></p>
+                <p>{% for horario in horarios  %}
+                {{ horario.diaSemana.dia }}: {{horario.horaAbre}} - {{horario.horaCierra}}
+                {% endfor %}</p>
+
+            </div>
+            <div class="card-body">
+                <a href="/" class="btn btn-primary">Volver</a>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

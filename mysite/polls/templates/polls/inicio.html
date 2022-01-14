@@ -1,23 +1,26 @@
 {% extends "polls/principal.html" %}
+{% block title %}
+<title>{{titulo}}</title>
+{% endblock %}
 
 {% block content %}
 {% load static %} 
 
     <div class="row">
         {% for neg in negocios %}
-        <div class="col-6 col-md-4">
+        <div class="col-6 col-md-4 mb-3">
 
-            <div class="card">
+            <div class="card h-100">
                 <div class="card-header justify-content-end">
                     <i class="bi-heart" style="font-size: 1rem"></i>
                 </div>
                 <img src="{{ neg.fotoNegocio.url }}" class="card-img-top"/>
                 <div class="card-body">
                     <span class="card-title">{{ neg.nombre }}</span>
-                    <p class="card-text">{{ neg.direccion }}</p>
+                    <!-- <p class="card-text">{{ neg.direccion }}</p> -->
                 </div>
                 <div class="card-body">
-                    <a href="#" class="btn btn-primary">Entrar</a>
+                    <a href="/mostrarNegocio/{{neg.id}}" class="btn btn-primary">Ver</a>
                 </div>
             </div>
         </div>
