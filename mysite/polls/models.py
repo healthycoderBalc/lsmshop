@@ -6,9 +6,9 @@ class Client(models.Model):
     nombre = models.CharField(max_length=200)
     apellido = models.CharField(max_length=200)
     cuentaFacebook = models.CharField(max_length=200)
-    email = models.CharField(max_length=200)
+    email = models.EmailField(max_length=254)
     telefono = models.CharField(max_length=200)
-    fechaNacimiento = models.DateTimeField('Fecha de Nacimiento')
+    fechaNacimiento = models.DateField('Fecha de Nacimiento')
     privilegios = models.BooleanField()
 
     def __str__(self):
@@ -59,8 +59,8 @@ class Business(models.Model):
 class Businesshourday(models.Model):
     negocio = models.ForeignKey(Business, on_delete=models.CASCADE)
     diaSemana = models.ForeignKey(Dayweek, on_delete=models.CASCADE)
-    horaAbre = models.DateTimeField('horario de apertura')
-    horaCierra = models.DateTimeField('horario de cierre')
+    horaAbre = models.TimeField('horario de apertura')
+    horaCierra = models.TimeField('horario de cierre')
 
     def __str__(self):
         return self.negocio.nombre
