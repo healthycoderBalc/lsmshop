@@ -35,7 +35,7 @@ urlpatterns = [
     # --------------------Suscripcion--------------------------------------- #
      path('cargarSuscripcion/', views.cargarSuscripcion, name='cargarSuscripcion'),
      path('listarSuscripciones/', views.listarSuscripciones, name='listarSuscripciones'),
-     path('mostrarSuscription/<id>', views.mostrarSuscripcion, name='mostrarSuscripcion'),
+     path('mostrarSuscripcion/<id>', views.mostrarSuscripcion, name='mostrarSuscripcion'),
      path('updateSuscripcion/<id>', views.update_suscripcion, name='update_suscripcion'),
      path('deleteSuscripcion/<id>', views.delete_suscripcion, name='delete_suscripcion'),
 
