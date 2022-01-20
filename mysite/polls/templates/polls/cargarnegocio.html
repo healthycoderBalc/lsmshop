@@ -1,0 +1,17 @@
+{% extends "polls/principal.html" %}
+
+{% block content %}
+
+
+<div class="col s12 m6">
+    <form class="mb-3" action="" method=POST enctype="multipart/form-data">
+        {% csrf_token %}
+        {{form.as_p}}
+        <button class="btn" type="submit">Cargar</button>
+    </form>
+
+    <a href="/">Cancelar</a>
+</div>
+
+
+{% endblock %}

@@ -1,5 +1,7 @@
+from msilib.schema import CheckBox
 from django import forms
 from .models import *
+import ipywidgets as Nwidgets
 
 # create a ModelForm
 class ClientForm(forms.ModelForm):
@@ -7,6 +9,9 @@ class ClientForm(forms.ModelForm):
     class Meta:
         model = Client
         fields = "__all__"
+        widgets = {
+            'fechaNacimiento': forms.SelectDateWidget
+        }
 
 class SubscriptionForm(forms.ModelForm):
     # specify the name of model to use
@@ -37,6 +42,10 @@ class BusinessForm(forms.ModelForm):
     class Meta:
         model = Business
         fields = "__all__"
+        widgets = {
+            'rubros': forms.CheckboxSelectMultiple,
+            'formasContacto': forms.CheckboxSelectMultiple
+        }
 
 class BusinesshourdayForm(forms.ModelForm):
     # specify the name of model to use

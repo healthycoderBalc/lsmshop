@@ -479,12 +479,17 @@ def cargarNegocio(request):
     # dictionary for initial data with
     # field names as keys
     context ={}
- 
+    idN = None
     # add the dictionary during initialization
     if request.method == 'POST':
         form = BusinessForm(request.POST or None, request.FILES)
         if form.is_valid():
             form.save()
+            idN = form.instance.pk
+            # Necesito obtener el id de negocio y el id de 
+            # forma de contacto para redireccionar a completar los datos de contacto ?????
+
+            
             return redirect('polls:principal')
     else:
         form = BusinessForm()
@@ -494,7 +499,7 @@ def cargarNegocio(request):
     context['form']= form
     context["titulo"] = titulo
 
-    return render(request, "polls/cargar.html", context)
+    return render(request, "polls/cargarnegocio.html", context)
 
 
 def listarNegocios(request):

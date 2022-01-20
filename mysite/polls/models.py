@@ -30,19 +30,17 @@ class Dayweek(models.Model):
         return self.dia
 
 
-class Heading(models.Model):
-    nombre = models.CharField(max_length=200)
-
-    def __str__(self):
-        return self.nombre
-
-
 class ContactForm(models.Model):
     nombre = models.CharField(max_length=200)
 
     def __str__(self):
         return self.nombre
 
+class Heading(models.Model):
+    nombre = models.CharField(max_length=200)
+    
+    def __str__(self):
+        return self.nombre
 
 class Business(models.Model):
     nombre = models.CharField(max_length=200)
@@ -51,9 +49,12 @@ class Business(models.Model):
     fotoLogotipo = models.ImageField(upload_to='images/')
     cliente = models.ForeignKey(Client, on_delete=models.CASCADE)
     suscripcion = models.ForeignKey(Subscription, on_delete=models.CASCADE)
+    rubros = models.ManyToManyField(Heading, through='BusinessArea')
+    formasContacto = models.ManyToManyField(ContactForm, through='BusinessContactForm')
 
     def __str__(self):
         return self.nombre
+
 
 
 class Businesshourday(models.Model):
