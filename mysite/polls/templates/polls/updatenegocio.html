@@ -6,15 +6,17 @@
 
 {% block content %}
 
+{% load crispy_forms_tags %}
+
 <!-- Create a Form -->
 <form method="POST">
     <!-- Security token by Django -->
     {% csrf_token %}
 
     <!-- form as paragraph -->
-    {{ form.as_p }}
+    {{ form|crispy }}
 
-    <input type="submit" value="Update">
+    <input type="submit" value="Update" class="btn btn-primary">
 </form>
 
 {% endblock %}

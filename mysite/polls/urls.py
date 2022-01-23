@@ -65,6 +65,7 @@ urlpatterns = [
      path('cargarNegocio/', views.cargarNegocio, name='cargarNegocio'),
      path('listarNegocios/', views.listarNegocios, name='listarNegocios'),
      path('mostrarNegocio/<id>', views.mostrarNegocio, name='mostrarNegocio'),
+     path('mostrarNegocioAdd/<id>', views.mostrarNegocioAdd, name='mostrarNegocioAdd'),
      path('updateNegocio/<id>', views.update_negocio, name='update_negocio'),
      path('deleteNegocio/<id>', views.delete_negocio, name='delete_negocio'),
 
@@ -91,6 +92,7 @@ urlpatterns = [
      path('listarNegocioformacontactos/', views.listarNegocioFormaContacto, name='listarNegocioFormaContacto'),
      path('mostrarNegocioformacontacto/<id>', views.mostrarNegocioFormaContacto, name='mostrarNegocioFormaContacto'),
      path('updateNegocioformacontacto/<id>', views.update_negocioformacontacto, name='update_negocioformacontacto'),
+     path('updateNegocioformacontactomodal/<id>', views.update_negocioformacontactomodal , name='update_negocioformacontactomodal'),
      path('deleteNegocioformacontacto/<id>', views.delete_negocioformacontacto, name='delete_negocioformacontacto'),
 
 

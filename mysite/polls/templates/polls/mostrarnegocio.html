@@ -5,6 +5,7 @@
 {% endblock %}
 
 {% block content %}
+{% load static %}
 
 <div class="row">
     <div class="col-12 col-md-6 mb-3">
@@ -15,16 +16,29 @@
             <div class="card-body">
                 <span class="card-title"> <b>Dirección: </b> {{ data.direccion }}</span>
                 <img src="{{ data.fotoNegocio.url }}" class="card-img-top"/>
-                <img src="{{ data.fotoLogotipo.url }}" class="card-img-top"/>
                 <p><b>Rubros: </b></p>
                 <p>{% for rubro in rubros  %}
                 {{ rubro.rubro.nombre }}, 
                 {% endfor %}</p>
 
+
                 <p><b>Contacto: </b></p>
                 {% for contacto in contactos  %}
-                <p>{{ contacto.formaContacto.nombre }}
-                {{ contacto.datosContacto }} </p>
+                <div class="row">
+                    <table>
+                        <tbody>
+                        <tr>
+                            <td class="col-2">
+                                <img src="{{ contacto.formaContacto.logo.url}}" class="w-100 p-3 float-right "/>
+                            </td>
+                            <td class="align-middle col-10">
+                                {{ contacto.formaContacto.nombre }}:            
+                                    <a href="https://wa.me/{{contacto.getNumber}}">+{{contacto.getNumber}}</a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
                 {% endfor %}
 
                 <p><b>Horario: </b></p>
@@ -40,4 +54,8 @@
         </div>
     </div>
 </div>
+
+
+<!-- no olvidar hacerle el footer en el principal -->
+<a href="https://www.flaticon.es/iconos-gratis/whatsapp" title="whatsapp iconos">Whatsapp iconos creados por Freepik - Flaticon</a>
 {% endblock %}

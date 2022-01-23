@@ -1,5 +1,6 @@
 
 # Create your views here.
+from typing_extensions import Self
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from .models import *
@@ -485,12 +486,7 @@ def cargarNegocio(request):
         form = BusinessForm(request.POST or None, request.FILES)
         if form.is_valid():
             form.save()
-            idN = form.instance.pk
-            # Necesito obtener el id de negocio y el id de 
-            # forma de contacto para redireccionar a completar los datos de contacto ?????
-
-            
-            return redirect('polls:principal')
+            return HttpResponseRedirect('/mostrarNegocioAdd/'+ str(form.instance.pk))
     else:
         form = BusinessForm()
          
@@ -515,6 +511,7 @@ def listarNegocios(request):
          
     return render(request, "polls/inicio.html", context)
 
+
 def mostrarNegocio(request, id):
     context ={}
  
@@ -535,6 +532,27 @@ def mostrarNegocio(request, id):
 
     return render(request, "polls/mostrarnegocio.html", context)
 
+def mostrarNegocioAdd(request, id):
+    context ={}
+ 
+    titulo = "Negocio"
+
+    rubros = BusinessArea.objects.filter(negocio__id=id)
+    context["rubros"] = rubros 
+
+    contactos = BusinessContactForm.objects.filter(negocio__id=id)
+    context["contactos"] = contactos
+
+    horarios = Businesshourday.objects.filter(negocio__id=id)
+    context["horarios"] = horarios
+
+    # add the dictionary during initialization
+    context["data"] = Business.objects.get(id = id)
+    context["titulo"] = titulo
+
+    return render(request, "polls/mostrarnegocioadd.html", context)
+
+
 def update_negocio(request, id):
     # dictionary for initial data with
     # field names as keys
@@ -550,7 +568,7 @@ def update_negocio(request, id):
     # redirect to detail_view
     if form.is_valid():
         form.save()
-        return HttpResponseRedirect("/mostrarNegocio/"+id)
+        return HttpResponseRedirect("/mostrarNegocioAdd/"+id)
  
     # add form dictionary to context
     titulo = "Negocio"
@@ -642,7 +660,7 @@ def update_negociohorariodia(request, id):
     # redirect to detail_view
     if form.is_valid():
         form.save()
-        return HttpResponseRedirect("/mostrarNegociohorariodia/"+id)
+        return HttpResponseRedirect("/mostrarNegocioAdd/"+str(Businesshourday.objects.get(id=id).negocio_id))
  
     # add form dictionary to context
     titulo = "Negocio Horario Dia"
@@ -823,7 +841,8 @@ def update_negocioformacontacto(request, id):
     # redirect to detail_view
     if form.is_valid():
         form.save()
-        return HttpResponseRedirect("/mostrarNegocioformacontacto/"+id)
+        return HttpResponseRedirect("/mostrarNegocioAdd/"+ str(BusinessContactForm.objects.get(id = id).negocio_id) )
+        # return HttpResponseRedirect("/mostrarNegocioformacontacto/"+id)
  
     # add form dictionary to context
     titulo = "Negocio Forma Contacto"
@@ -831,6 +850,33 @@ def update_negocioformacontacto(request, id):
     context["titulo"] = titulo
  
     return render(request, "polls/updatenegocioformacontacto.html", context)
+
+
+def update_negocioformacontactomodal(request, id):
+    # dictionary for initial data with
+    # field names as keys
+    context ={}
+ 
+    # fetch the object related to passed id
+    obj = get_object_or_404(BusinessContactForm, id = id)
+ 
+    # pass the object as instance in form
+    form = BusinessContactFormForm(request.POST or None, instance = obj)
+ 
+    # save the data from the form and
+    # redirect to detail_view
+    if form.is_valid():
+        form.save()
+        return HttpResponseRedirect("/mostrarNegocioformacontacto/"+id)
+ 
+    # add form dictionary to context
+    titulo = "Negocio Forma Contacto"
+    context["form"] = form
+    context["titulo"] = titulo
+ 
+    return render(request, "polls/updatenegocioformacontactomodal.html", context)
+
+
 
 
 def delete_negocioformacontacto(request, id):

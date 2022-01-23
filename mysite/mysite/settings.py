@@ -40,10 +40,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'social.apps.django_app.default',
     'social_django',
-    
+    'crispy_forms',
+    'bootstrap_datepicker_plus',
    ]
 
-
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 
 MIDDLEWARE= [
@@ -128,6 +129,7 @@ USE_TZ= True
 # https://docs.djangoproject.com/en/dev/howto/static-files/
 
 STATIC_URL= 'static/'
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/dev/ref/settings/#default-auto-field

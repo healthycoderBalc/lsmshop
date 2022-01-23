@@ -1,7 +1,10 @@
 from msilib.schema import CheckBox
+from attr import attr, attrs
 from django import forms
 from .models import *
 import ipywidgets as Nwidgets
+from bootstrap_datepicker_plus.widgets import TimePickerInput
+
 
 # create a ModelForm
 class ClientForm(forms.ModelForm):
@@ -44,7 +47,8 @@ class BusinessForm(forms.ModelForm):
         fields = "__all__"
         widgets = {
             'rubros': forms.CheckboxSelectMultiple,
-            'formasContacto': forms.CheckboxSelectMultiple
+            'formasContacto': forms.CheckboxSelectMultiple,
+            'diasSemana': forms.CheckboxSelectMultiple
         }
 
 class BusinesshourdayForm(forms.ModelForm):
@@ -52,6 +56,10 @@ class BusinesshourdayForm(forms.ModelForm):
     class Meta:
         model = Businesshourday
         fields = "__all__"
+        widgets = {
+            'horaAbre': TimePickerInput(),
+            'horaCierra': TimePickerInput()
+        }
 
 class BusinessAreaForm(forms.ModelForm):
     # specify the name of model to use
@@ -64,3 +72,6 @@ class BusinessContactFormForm(forms.ModelForm):
     class Meta:
         model = BusinessContactForm
         fields = "__all__"
+        widgets = {
+            'datosContacto': forms.TextInput(attrs={'placeholder': 'para número incluir el 15, ej: 343154444444'}),
+        }
