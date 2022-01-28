@@ -6,6 +6,14 @@
 {% block content %}
 {% load static %}
 
+<div class="justify-content-centery">
+    <form class="d-flex">
+        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-success" type="submit">Buscar</button>
+    </form>
+</div>
+<br>
+
 <div class="row">
     {% for neg in negocios %}
     <div class="col-6 col-md-4 mb-3">

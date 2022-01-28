@@ -1,0 +1,41 @@
+{% extends "polls/principal.html" %}
+
+{% block title %}
+<title>{{titulo}}</title>
+{% endblock %}
+
+{% block content %}
+
+
+<div class="container">
+    <div class="row text-center border border-5 rounded-3 d-flex align-items-center justify-content-center"
+        style="height: 100px;">
+        <p>¡Hola <strong>{{clientecito.nombre}}</strong>! Estos son tus negocios:</p>
+    </div>
+</div>
+<br>
+
+<div class="row">
+    {% for data in dataset %}
+    <div class="col-6 col-md-4 mb-3">
+        <div class="card h-100">
+            <img src="{{ data.fotoNegocio.url }}" class="card-img-top" />
+            <div class="card-body">
+                <span class="card-title">{{ data.nombre }}</span>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2 d-md-block">
+                    <a href="/mostrarNegocioAdd/{{data.id}}"
+                        class="btn btn-outline-success"><small>Administrar</small></a>
+                    <a href="/deleteNegocio/{{data.id}}" class="btn btn-danger"><small>Eliminar</small></a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    <a href="/cargarNegocio/{{data.id}}" class="btn btn-primary">Añadir nuevo negocio</a>
+</div>
+
+
+
+{% endblock %}

@@ -48,9 +48,11 @@ PRUEBITA
 
             </div>
             <div class="card-body">
-                <a href="/" class="btn btn-secondary">Volver</a>
-                <a href="/updateNegocio/{{data.id}}" class="btn btn-primary">Modificar</a>
-                <a href="/deleteNegocio/{{data.id}}" class="btn btn-danger">Eliminar</a>
+                <div class="d-grid gap-2 d-md-block">
+                    <a href="/listarNegociosCliente/{{data.cliente.id}}" class="btn btn-outline-success">Volver</a>
+                    <a href="/updateNegocio/{{data.id}}" class="btn btn-outline-primary">Modificar</a>
+                    <a href="/deleteNegocio/{{data.id}}" class="btn btn-danger">Eliminar</a>
+                </div>
             </div>
 
         </div>

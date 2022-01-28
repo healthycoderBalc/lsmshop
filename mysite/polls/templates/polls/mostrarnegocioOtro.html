@@ -40,7 +40,9 @@
                                 </td>
 
                                 <td class="align-middle col-10">
-                                    <a href="{{contacto.getEnlace}}" class="btn btn-outline-success"><small>{{contacto.formaContacto.nombre }}</small></a>
+                                    <a href="{{contacto.getEnlace}}"
+                                        class="btn btn-outline-success"><small>{{contacto.formaContacto.nombre
+                                            }}</small></a>
 
                                 </td>
                             </tr>
@@ -48,6 +50,24 @@
                     </table>
                 </div>
                 {% endfor %}
+
+                <div class="mw-100 bg-light text-dark">
+                    <p><b>Contactar: </b></p>
+                </div>
+                {% for contacto in contactos %}
+                <div class="container pt-4">
+                    <section class="mb-4">
+                        <a class="btn btn-link btn-floating btn-lg text-dark m-1" href="#" role="button"
+                            data-mdb-ripple-color="dark"><i class="bi bi-facebook-f"></i></a>
+                    </section>
+                </div>
+
+
+                {% endfor %}
+
+
+
+
 
                 <div class="mw-100 bg-light text-dark">
                     <p><b>Rubros: </b></p>

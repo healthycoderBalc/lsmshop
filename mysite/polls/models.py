@@ -86,16 +86,26 @@ class BusinessContactForm(models.Model):
     def __str__(self):
         return self.negocio.nombre
     
-    def getNumber(self):
-        numero = ''
+    def getEnlace(self):
+        enlace = ''
         if (self.formaContacto.nombre == 'Facebook'):
-            numero = ''
-        else:
+            enlace = self.datosContacto
+        elif (self.formaContacto.nombre == 'Instagram'):
+            enlace = 'https://www.instagram.com/'+self.datosContacto
+        elif (self.formaContacto.nombre == 'Llamada'):
+            separados = self.datosContacto.split("15", 1)
+            separados.insert(0,'+549')
+            for item in separados:
+                enlace = enlace + item
+            enlace = 'tel:'+enlace
+        elif (self.formaContacto.nombre == 'WhatsApp'):
             separados = self.datosContacto.split("15", 1)
             separados.insert(0,'549')
 
             for item in separados:
-                numero = numero + item
-                # print(numero)
-        return numero
+                enlace = enlace + item
+            enlace = 'https://wa.me/'+enlace
+        else:
+            enlace = 'desconocido'
+        return enlace
 

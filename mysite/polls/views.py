@@ -476,11 +476,31 @@ def delete_formacontacto(request, id):
 # ---------------------------------Negocio------------------------------------------- #
 # ----------------------------------------------------------------------------------- #
 
+def administrarNegocios(request, id):
+    context={}
+
+    # negocitos = Business.objects.filter(cliente_set_)
+    dataset = Business.objects.filter(cliente__id=id)
+
+
+    titulo = "Mis Negocios"
+
+
+    # add the dictionary during initialization
+    context["dataset"] = dataset
+
+    context["titulo"] = titulo
+    context["clientes"] = Client.objects.all()
+    context["clientecito"] = Client.objects.get(id = id)
+
+    return render(request, "polls/listarnegocioscliente.html", context)
+
+
 def cargarNegocio(request):
     # dictionary for initial data with
     # field names as keys
     context ={}
-    idN = None
+    # idN = None
     # add the dictionary during initialization
     if request.method == 'POST':
         form = BusinessForm(request.POST or None, request.FILES)
@@ -530,7 +550,7 @@ def mostrarNegocio(request, id):
     context["data"] = Business.objects.get(id = id)
     context["titulo"] = titulo
 
-    return render(request, "polls/mostrarnegocio.html", context)
+    return render(request, "polls/mostrarnegocioOtro.html", context)
 
 def mostrarNegocioAdd(request, id):
     context ={}

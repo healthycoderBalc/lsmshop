@@ -64,11 +64,12 @@ urlpatterns = [
     # --------------------Negocio------------------------------------------- #
      path('cargarNegocio/', views.cargarNegocio, name='cargarNegocio'),
      path('listarNegocios/', views.listarNegocios, name='listarNegocios'),
+     path('listarNegociosCliente/<id>', views.administrarNegocios, name='administrarNegocios'),
      path('mostrarNegocio/<id>', views.mostrarNegocio, name='mostrarNegocio'),
      path('mostrarNegocioAdd/<id>', views.mostrarNegocioAdd, name='mostrarNegocioAdd'),
      path('updateNegocio/<id>', views.update_negocio, name='update_negocio'),
      path('deleteNegocio/<id>', views.delete_negocio, name='delete_negocio'),
-
+     
     
     # --------------------NegocioHoraDia------------------------------------------- #
      path('cargarNegocioHoraDia/', views.cargarNegocioHoraDia, name='cargarNegocioHoraDia'),
