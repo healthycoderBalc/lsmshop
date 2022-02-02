@@ -4,6 +4,7 @@ from django import forms
 from .models import *
 import ipywidgets as Nwidgets
 from bootstrap_datepicker_plus.widgets import TimePickerInput
+from django.contrib.auth.forms import UserCreationForm
 
 
 # create a ModelForm
@@ -12,9 +13,12 @@ class ClientForm(forms.ModelForm):
     class Meta:
         model = Client
         fields = "__all__"
-        widgets = {
-            'fechaNacimiento': forms.SelectDateWidget
-        }
+
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user', None)
+        super(ClientForm, self).__init__(*args, **kwargs)
+        self.fields['user'].queryset = User.objects.filter(username = self.user)
+        # print(self.fields['user'].queryset)
 
 class SubscriptionForm(forms.ModelForm):
     # specify the name of model to use
@@ -50,6 +54,12 @@ class BusinessForm(forms.ModelForm):
             'formasContacto': forms.CheckboxSelectMultiple,
             'diasSemana': forms.CheckboxSelectMultiple
         }
+    
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user', None)
+        super(BusinessForm, self).__init__(*args, **kwargs)
+        self.fields['cliente'].queryset = Client.objects.filter(user = self.user)
+        print(self.fields['cliente'].queryset)
 
 class BusinesshourdayForm(forms.ModelForm):
     # specify the name of model to use
@@ -75,3 +85,12 @@ class BusinessContactFormForm(forms.ModelForm):
         widgets = {
             'datosContacto': forms.TextInput(attrs={'placeholder': 'para número incluir el 15, ej: 343154444444'}),
         }
+
+class RegistroForm(UserCreationForm):
+    first_name = forms.CharField(max_length=32, help_text='First name')
+    last_name = forms.CharField(max_length=32, help_text='Last name')
+    email = forms.EmailField(max_length=64, help_text='Enter a valid email address')
+
+    class Meta:
+        model = User
+        fields = UserCreationForm.Meta.fields + ('first_name', 'last_name', 'email',)

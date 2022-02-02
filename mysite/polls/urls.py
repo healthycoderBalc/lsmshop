@@ -14,12 +14,17 @@ app_name='polls'
 
 urlpatterns = [
     #path('', views.index, name='index'),
+    path('registrarse/', views.registro, name='registro'),
+    path('salir/', views.salir, name='salir'),
+    path('ingresar/', views.entrar, name='entrar'),
+    path('', views.buscar, name='search_results'),
+
 
     path('login/', views.login, name='login'),
     path('oauth/', include('social_django.urls', namespace='social')),
 
     path('', views.principal, name='principal'),
-    path('signup/', views.signup, name='signup'),
+    
     #path('logout/', views.logout, name="user-logout"),
     path('loguincito/', views.loguincito, name="loguincito"),
 
@@ -64,7 +69,7 @@ urlpatterns = [
     # --------------------Negocio------------------------------------------- #
      path('cargarNegocio/', views.cargarNegocio, name='cargarNegocio'),
      path('listarNegocios/', views.listarNegocios, name='listarNegocios'),
-     path('listarNegociosCliente/<id>', views.administrarNegocios, name='administrarNegocios'),
+     path('listarNegociosCliente/', views.administrarNegocios, name='administrarNegocios'),
      path('mostrarNegocio/<id>', views.mostrarNegocio, name='mostrarNegocio'),
      path('mostrarNegocioAdd/<id>', views.mostrarNegocioAdd, name='mostrarNegocioAdd'),
      path('updateNegocio/<id>', views.update_negocio, name='update_negocio'),

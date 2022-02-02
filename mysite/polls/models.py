@@ -1,18 +1,21 @@
 from django.db import models
 from django.db.models.fields import EmailField
+from django.contrib.auth.models import User
 
 
 class Client(models.Model):
-    nombre = models.CharField(max_length=200)
-    apellido = models.CharField(max_length=200)
+
+    user = models.OneToOneField(User, on_delete=models.CASCADE, default= '')
+    # nombre = models.CharField(max_length=200)
+    # apellido = models.CharField(max_length=200)
     cuentaFacebook = models.CharField(max_length=200)
-    email = models.EmailField(max_length=254)
+    # email = models.EmailField(max_length=254)
     telefono = models.CharField(max_length=200)
-    fechaNacimiento = models.DateField('Fecha de Nacimiento')
+    # fechaNacimiento = models.DateField('Fecha de Nacimiento')
     privilegios = models.BooleanField()
 
     def __str__(self):
-        return self.nombre
+        return self.user.first_name
 
 
 class Subscription(models.Model):

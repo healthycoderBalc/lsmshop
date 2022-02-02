@@ -5,7 +5,6 @@
 {% endblock %}
 
 {% block content %}
-PRUEBITA
 <div class="row">
     <div class="col-12 col-md-6 mb-3">
         <div class="card">
@@ -25,7 +24,9 @@ PRUEBITA
                     {% for contacto in contactos %}
                         {% if contacto.datosContacto %}
                             <p>{{ contacto.formaContacto.nombre }}:
-                                {{ contacto.datosContacto }} </p>
+                                {{ contacto.datosContacto }} 
+                                <a href="/updateNegocioformacontacto/{{contacto.id}}" class="btn btn-outline-success">Modificar</a>
+                            </p>
                         {% else %}
                             <p>{{ contacto.formaContacto.nombre }}:
                                 <small>(No se ha añadido)</small>
@@ -37,7 +38,10 @@ PRUEBITA
                 <p><b>Horario: </b></p>
                     {% for horario in horarios %}
                         {% if horario.horaAbre and horario.horaCierra %}
-                            <p>{{ horario.diaSemana.dia }}: {{horario.horaAbre}} - {{horario.horaCierra}}</p>
+                            <p>
+                                {{ horario.diaSemana.dia }}: {{horario.horaAbre}} - {{horario.horaCierra}}
+                                <a href="/updateNegociohorariodia/{{horario.id}}" class="btn btn-outline-success">Modificar</a>
+                            </p>
                         {% else %}
                             <p>{{ horario.diaSemana.dia }}:
                                 <small>(No se ha añadido hora)</small>
@@ -49,7 +53,7 @@ PRUEBITA
             </div>
             <div class="card-body">
                 <div class="d-grid gap-2 d-md-block">
-                    <a href="/listarNegociosCliente/{{data.cliente.id}}" class="btn btn-outline-success">Volver</a>
+                    <a href="/listarNegociosCliente/" class="btn btn-outline-success">Volver</a>
                     <a href="/updateNegocio/{{data.id}}" class="btn btn-outline-primary">Modificar</a>
                     <a href="/deleteNegocio/{{data.id}}" class="btn btn-danger">Eliminar</a>
                 </div>

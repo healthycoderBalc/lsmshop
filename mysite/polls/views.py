@@ -6,12 +6,14 @@ from django.shortcuts import render, redirect
 from .models import *
 from .urls import *
 from .forms import *
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import (get_object_or_404,
                               render,
                               HttpResponseRedirect)
+from django.contrib import messages
+from django.db.models import Q
 
 # ----------------------------------------------------------------------------------- #
 # ---------------------------------Cliente------------------------------------------- #
@@ -21,14 +23,22 @@ from django.shortcuts import (get_object_or_404,
 def cargarCliente(request):
     # dictionary for initial data with
     # field names as keys
+
     context ={}
  
     # add the dictionary during initialization
-    form = ClientForm(request.POST or None)
-    if form.is_valid():
-        form.save()
+    if request.method == 'POST':
+        form = ClientForm(request.POST or None, user = request.user)
+        # form.fields["user"].queryset = User.objects.filter(user_id=usuario.id)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('/mostrarCliente/'+ str(form.instance.pk))
+    else:
+        form = ClientForm(user = request.user)
+
 
     titulo = "Cliente"
+    # context['usuario'] = usuario
     context['form']= form
     context["titulo"] = titulo     
 
@@ -476,11 +486,12 @@ def delete_formacontacto(request, id):
 # ---------------------------------Negocio------------------------------------------- #
 # ----------------------------------------------------------------------------------- #
 
-def administrarNegocios(request, id):
+def administrarNegocios(request):
     context={}
 
-    # negocitos = Business.objects.filter(cliente_set_)
-    dataset = Business.objects.filter(cliente__id=id)
+    cliente = Client.objects.get(user__pk = request.user.id)
+    # dataset = Business.objects.filter(cliente__id=id)
+    dataset = Business.objects.filter(cliente__id=cliente.id)
 
 
     titulo = "Mis Negocios"
@@ -490,8 +501,8 @@ def administrarNegocios(request, id):
     context["dataset"] = dataset
 
     context["titulo"] = titulo
-    context["clientes"] = Client.objects.all()
-    context["clientecito"] = Client.objects.get(id = id)
+    context["cliente"] = cliente
+    # context["clientecito"] = Client.objects.get(id = id)
 
     return render(request, "polls/listarnegocioscliente.html", context)
 
@@ -503,12 +514,12 @@ def cargarNegocio(request):
     # idN = None
     # add the dictionary during initialization
     if request.method == 'POST':
-        form = BusinessForm(request.POST or None, request.FILES)
+        form = BusinessForm(request.POST or None, request.FILES, user = request.user)
         if form.is_valid():
             form.save()
             return HttpResponseRedirect('/mostrarNegocioAdd/'+ str(form.instance.pk))
     else:
-        form = BusinessForm()
+        form = BusinessForm(user = request.user)
          
 
     titulo = "Negocio"
@@ -940,29 +951,10 @@ def principal(request):
 
     return render(request, "polls/inicio.html", context)
 
-def login(request):
-
-    return render(request, "polls/login.html")
 
 
-def signup(request):
 
-    if request.method == "POST":
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            usuario = form.save()
-            login(request, usuario)
-            return redirect("polls:principal")
-        else:
-            for msg in form.error_messages:
-                print(form.error_messages[msg])
 
-    form = UserCreationForm
-    return render(request, "polls/signup.html", {"form": form})
-
-def logout(request):
-    logout(request)
-    return redirect('/')
 
 def loguincito(request):
     return render(request, "polls/home.html")
@@ -976,3 +968,71 @@ from django.views.generic import TemplateView
 
 class HomeView(LoginRequiredMixin, TemplateView):
     template_name = "home.html" 
+
+
+
+
+# ----------------------------------------------------------------------------------- #
+# ---------------------------------Autenticacion------------------------------------- #
+# ----------------------------------------------------------------------------------- #
+
+def registro(request):
+
+    if request.method == "POST":
+        form = RegistroForm(request.POST)
+        if form.is_valid():
+            usuario = form.save()
+            nombre_usuario = form.cleaned_data.get('username')
+            messages.success(request, f"Nueva cuenta creada : {nombre_usuario}")
+            login(request, usuario, backend='django.contrib.auth.backends.ModelBackend')
+            return redirect("polls:admCliente")
+        else:
+            for msg in form.error_messages:
+                messages.error(request, f"{msg}: form.error_messages[msg]")
+
+    form = RegistroForm()
+    return render(request, "polls/registrarse.html", {"form": form})
+
+def salir(request):
+    logout(request)
+    return redirect("polls:principal")
+
+
+def entrar(request):
+    if request.method == "POST":
+        form = AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            usuario = form.cleaned_data.get('username')
+            contrasena = form.cleaned_data.get('password')
+            user = authenticate(username=usuario, password=contrasena)
+            
+            if user is not None:
+                login(request, user)
+                return redirect("polls:principal")
+            else:
+                messages.error(request, "Usuario o contraseña incorrecta")
+        else:
+          messages.error(request, "Usuario o contraseña incorrecta")  
+
+    form = AuthenticationForm()
+    return render(request, "polls/entrar.html", {"form": form})
+
+
+
+# ----------------------------------------------------------------------------------- #
+# ---------------------------------Busqueda------------------------------------------ #
+# ----------------------------------------------------------------------------------- #
+def buscar(request):
+    negocios = []
+    if request.method == "GET":
+        query = request.GET.get('q', None)
+        if query:
+            negocios = Business.objects.filter(
+                Q(nombre__icontains=query)
+            )
+        else:
+            negocios = Business.objects.all()
+    print(negocios)
+    print(query)
+
+    return render(request, "polls/inicio.html", {"negocios": negocios, "query": query})

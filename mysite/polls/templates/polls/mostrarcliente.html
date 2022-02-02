@@ -10,15 +10,14 @@
     <div class="col-12 col-md-6 mb-3">
         <div class="card">
             <div class="card-body">
-                <span class="card-title"><b>Nombre: </b>{{ data.nombre}} {{ data.apellido }}</span>
+                <span class="card-title"><b>Nombre: </b>{{ data.user.first_name}} {{ data.user.last_name }}</span>
                 <p class="card-text"><b>Facebook: </b>{{ data.cuentaFacebook }}</p>
-                <p class="card-text"><b>Email: </b>{{ data.email }}</p>
+                <p class="card-text"><b>Email: </b>{{ data.user.email }}</p>
                 <p class="card-text"><b>Telefono: </b>{{ data.telefono }}</p>
-                <p class="card-text"><b>Fecha de Nacimiento: </b>{{ data.fechaNacimiento }}</p>
                 <p class="card-text"><b>¿Es administrador? </b>{{ data.privilegios }}</p>
             </div>
             <div class="card-body">
-                <a href="/listarClientes/" class="btn btn-primary">Volver</a>
+                <a href="/" class="btn btn-primary">Volver</a>
             </div>
 
         </div>
