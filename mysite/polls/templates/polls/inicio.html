@@ -6,6 +6,10 @@
 {% block content %}
 {% load static %}
 
+
+<!-- ################# -->
+<!-- Barra de busqueda -->
+<!-- ################# -->
 <div class="justify-content-centery">
     <form class="d-flex" action="{% url 'polls:principal' %}" method="get">
         <input name="q" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
@@ -13,6 +17,30 @@
     </form>
 </div>
 <br>
+
+
+
+
+<!-- ################# -->
+<!-- Filtros -->
+<!-- ################# -->
+
+<select class="form-select" aria-label="Select" onchange="location = this.value;">
+    <option selected>Filtrar por</option>
+    <optgroup label="Rubro">
+        {% for cat in categorias %}
+            <option value="negociosPorRubro/{{cat.id}}">{{cat.nombre}}</option>
+        {% endfor %}
+    </optgroup>
+    <option value="2">Horario</option>
+</select>
+<br>
+
+
+
+<!-- ################# -->
+<!-- Lista de negocios -->
+<!-- ################# -->
 
 <div class="row">
     {% for neg in negocios %}
@@ -38,6 +66,11 @@
     </div>
     {% endfor %}
 </div>
+
+
+<!-- ################# -->
+<!-- Boton para mostrar todos los negocios tras busqueda -->
+<!-- ################# -->
 
 {% if query != None %}
 <div class="d-grid gap-2 d-md-block">

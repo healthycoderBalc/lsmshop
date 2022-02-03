@@ -561,7 +561,7 @@ def mostrarNegocio(request, id):
     context["data"] = Business.objects.get(id = id)
     context["titulo"] = titulo
 
-    return render(request, "polls/mostrarnegocioOtro.html", context)
+    return render(request, "polls/mostrarnegocio.html", context)
 
 def mostrarNegocioAdd(request, id):
     context ={}
@@ -948,6 +948,7 @@ def principal(request):
     titulo = "LSM Shop"
     context["titulo"] = titulo
     context["negocios"] = Business.objects.all
+    context["categorias"] = Heading.objects.all
 
     return render(request, "polls/inicio.html", context)
 
@@ -1018,12 +1019,23 @@ def entrar(request):
     return render(request, "polls/entrar.html", {"form": form})
 
 
+def perfil(request):
+    context = {}
+
+    cliente = Client.objects.get(user__pk = request.user.id)
+
+    context["cliente"] = cliente
+
+    return render(request, "polls/perfilcliente.html", context)
+
 
 # ----------------------------------------------------------------------------------- #
 # ---------------------------------Busqueda------------------------------------------ #
 # ----------------------------------------------------------------------------------- #
 def buscar(request):
+    context = {}
     negocios = []
+    categorias = Heading.objects.all()
     if request.method == "GET":
         query = request.GET.get('q', None)
         if query:
@@ -1034,5 +1046,31 @@ def buscar(request):
             negocios = Business.objects.all()
     print(negocios)
     print(query)
+    context["negocios"] = negocios
+    context["query"] = query
+    context["categorias"] = categorias
 
-    return render(request, "polls/inicio.html", {"negocios": negocios, "query": query})
+    return render(request, "polls/inicio.html", context)
+
+# def filtrarRubros(request):
+#     context ={}
+ 
+#     rubro = 
+
+#     titulo = "Rubro"
+#     context["dataset"] = Heading.objects.all()
+#     context["titulo"] = titulo
+         
+#     return render(request, "polls/filtrarrubros.html", context)
+
+def filtrarXRubros(request, id):
+    context = {}
+    rubro = Heading.objects.get(id = id)
+    negocios = Business.objects.filter(rubros__id=id)
+
+    context["dataset"] = negocios
+    context["rubro"] = rubro
+
+    return render(request, "polls/filtrarrubros.html", context)
+
+

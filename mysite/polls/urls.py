@@ -17,7 +17,9 @@ urlpatterns = [
     path('registrarse/', views.registro, name='registro'),
     path('salir/', views.salir, name='salir'),
     path('ingresar/', views.entrar, name='entrar'),
+    path('perfilCliente', views.perfil, name="perfilCliente"),
     path('', views.buscar, name='search_results'),
+    path('negociosPorRubro/<id>', views.filtrarXRubros, name='filtrarXRubros'),
 
 
     path('login/', views.login, name='login'),
