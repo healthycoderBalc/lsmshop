@@ -1,0 +1,53 @@
+<!-- tengo que crear un template intermedio donde la 
+    persona filtre y otro template con la lista de negocios 
+    filtrados. Ver el direccionamiento -->
+
+    <!-- Este va a ser mostrando la lista de negocios -->
+
+    {% extends "polls/principal.html" %}
+    {% block title %}
+    <title>{{titulo}}</title>
+    {% endblock %}
+    
+    {% block content %}
+    {% load static %}
+    
+    
+    <div class="container">
+        <div class="row text-center border border-5 rounded-3 d-flex align-items-center justify-content-center"
+            style="height: 100px;">
+            <p>Negocios que abren el día {{dia}}</p>
+            <p>Entre {{horaAbre}} y {{horaCierra}}</p>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        {% for data in dataset %}
+        <div class="col-6 col-md-4 mb-3">
+    
+            <div class="card h-100">
+                <div class="card-header justify-content-end">
+                    <i class="bi-heart" style="font-size: 1rem"></i>
+                </div>
+                <div class="card">
+                    <img src="{{ data.negocio.fotoNegocio.url }}" class="card-img-top" />
+                </div>
+                <div class="card-body">
+                        <span class="card-title">
+                            <b>{{ data.negocio.nombre }}</b>
+                        </span>
+                    <!-- <p class="card-text">{{ neg.direccion }}</p> -->
+                </div>
+                <div class="card-body">
+                    <a href="/mostrarNegocio/{{data.negocio.id}}" class="btn btn-primary">Ver</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    
+    <div class="d-grid gap-2 d-md-block">
+        <a href="/" class="btn btn-outline-success">Mostrar todos los negocios</a>
+    </div>
+    
+    {% endblock %}

@@ -14,6 +14,7 @@ from django.shortcuts import (get_object_or_404,
                               HttpResponseRedirect)
 from django.contrib import messages
 from django.db.models import Q
+from django.utils import dateparse
 
 # ----------------------------------------------------------------------------------- #
 # ---------------------------------Cliente------------------------------------------- #
@@ -1019,6 +1020,9 @@ def entrar(request):
     return render(request, "polls/entrar.html", {"form": form})
 
 
+# ---------------------------------Perfil del logueado------------------------------- #
+
+
 def perfil(request):
     context = {}
 
@@ -1032,6 +1036,9 @@ def perfil(request):
 # ----------------------------------------------------------------------------------- #
 # ---------------------------------Busqueda------------------------------------------ #
 # ----------------------------------------------------------------------------------- #
+
+
+# ---------------------------------Por negocio--------------------------------------- #
 def buscar(request):
     context = {}
     negocios = []
@@ -1052,17 +1059,8 @@ def buscar(request):
 
     return render(request, "polls/inicio.html", context)
 
-# def filtrarRubros(request):
-#     context ={}
- 
-#     rubro = 
 
-#     titulo = "Rubro"
-#     context["dataset"] = Heading.objects.all()
-#     context["titulo"] = titulo
-         
-#     return render(request, "polls/filtrarrubros.html", context)
-
+# ---------------------------------Por rubro------------------------------------------ #
 def filtrarXRubros(request, id):
     context = {}
     rubro = Heading.objects.get(id = id)
@@ -1074,3 +1072,49 @@ def filtrarXRubros(request, id):
     return render(request, "polls/filtrarrubros.html", context)
 
 
+# ---------------------------------Por dia y horario--------------------------------------- #
+def seleccionHorarios(request):
+    context = {}
+
+    if request.method == 'POST': # If the form has been submitted...
+        form = DateRangeForm(request.POST or None) # A form bound to the POST data
+        if form.is_valid(): # All validation rules pass
+            # Process the data in form.cleaned_data
+            # ...
+            dia = form.cleaned_data.get('dia')
+            # dia1 = dia.strftime('%H:%M:%S')
+            horaAbre = form.cleaned_data.get('start_date')
+            horaAbre1 = horaAbre.strftime('%H:%M:%S')
+            horaCierra = form.cleaned_data.get('end_date')
+            horaCierra1 = horaCierra.strftime('%H:%M:%S')
+
+            return HttpResponseRedirect('/negociosPorHorarios/'+ dia.dia +'/'+horaAbre1+'/'+horaCierra1) # Redirect after POST
+    else:
+        form = DateRangeForm() # An unbound form
+    
+    context['form']= form
+
+    return render(request, "polls/seleccionhorarios.html", context)
+
+def filtrarXHorario(request, diaSemana, horaAbre, horaCierra):
+    context = {}
+
+    negociosDia = Businesshourday.objects.filter(diaSemana__dia = diaSemana)
+    # for neg in negociosDia:
+    #     print(neg.negocio.nombre)
+    #     print("por Dia")
+
+    negociosHorario = negociosDia.filter(horaAbre__lte=horaAbre, horaCierra__gte=horaCierra)
+    # for neg in negociosHorario:
+    #     print("negocito")
+    #     print(neg.negocio.nombre)
+
+    # print(negociosHorario[0])
+
+    context["dia"] = diaSemana
+    context["horaAbre"] = horaAbre
+    context["horaCierra"] = horaCierra
+    context["dataset"] = negociosHorario
+    context["negociosD"] = negociosDia
+
+    return render(request, "polls/filtrarhorarios.html", context)

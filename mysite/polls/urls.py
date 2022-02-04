@@ -20,6 +20,8 @@ urlpatterns = [
     path('perfilCliente', views.perfil, name="perfilCliente"),
     path('', views.buscar, name='search_results'),
     path('negociosPorRubro/<id>', views.filtrarXRubros, name='filtrarXRubros'),
+    path('seleccionHorarios/', views.seleccionHorarios, name='seleccionHorarios' ),
+    path('negociosPorHorarios/<diaSemana>/<horaAbre>/<horaCierra>', views.filtrarXHorario, name='negociosPorHorarios' ),
 
 
     path('login/', views.login, name='login'),

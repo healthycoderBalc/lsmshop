@@ -94,3 +94,10 @@ class RegistroForm(UserCreationForm):
     class Meta:
         model = User
         fields = UserCreationForm.Meta.fields + ('first_name', 'last_name', 'email',)
+
+
+
+class DateRangeForm(forms.Form):
+    dia = forms.ModelChoiceField(queryset = Dayweek.objects.all())
+    start_date = forms.TimeField(required=True, widget=TimePickerInput())
+    end_date = forms.TimeField(required=True, widget=TimePickerInput())

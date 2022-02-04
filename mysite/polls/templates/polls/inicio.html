@@ -29,10 +29,10 @@
     <option selected>Filtrar por</option>
     <optgroup label="Rubro">
         {% for cat in categorias %}
-            <option value="negociosPorRubro/{{cat.id}}">{{cat.nombre}}</option>
+            <option value="/negociosPorRubro/{{cat.id}}">{{cat.nombre}}</option>
         {% endfor %}
     </optgroup>
-    <option value="2">Horario</option>
+    <option value="/seleccionHorarios">Horario</option>
 </select>
 <br>
 
