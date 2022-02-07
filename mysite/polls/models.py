@@ -12,10 +12,20 @@ class Client(models.Model):
     # email = models.EmailField(max_length=254)
     telefono = models.CharField(max_length=200)
     # fechaNacimiento = models.DateField('Fecha de Nacimiento')
-    privilegios = models.BooleanField()
+    privilegios = models.BooleanField(default=False)
 
     def __str__(self):
         return self.user.first_name
+    
+    def getPrivilegios(self):
+        privilegiado = ''
+        if self.privilegios:
+            privilegiado = 'Si'
+        else:
+            privilegiado = 'No'
+        
+        return privilegiado
+
 
 
 class Subscription(models.Model):

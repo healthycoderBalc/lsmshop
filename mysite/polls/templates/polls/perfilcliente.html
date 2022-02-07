@@ -14,10 +14,13 @@
                 <p class="card-text"><b>Facebook: </b>{{ cliente.cuentaFacebook }}</p>
                 <p class="card-text"><b>Email: </b>{{ cliente.user.email }}</p>
                 <p class="card-text"><b>Telefono: </b>{{ cliente.telefono }}</p>
-                <p class="card-text"><b>¿Es administrador? </b>{{ cliente.privilegios }}</p>
+                <p class="card-text"><i>{{ cliente.getPrivilegios }} eres Administrador del Sitio</i></p>
             </div>
             <div class="card-body">
-                <a href="/" class="btn btn-primary">Volver</a>
+                <div class="d-grid gap-2 d-md-block">
+                    <a href="/updateCliente/{{cliente.id}}" class="btn btn-warning">Modificar</a>
+                    <a href="/" class="btn btn-primary">Volver</a>
+                </div>
             </div>
 
         </div>

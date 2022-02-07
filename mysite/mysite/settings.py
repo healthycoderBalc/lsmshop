@@ -144,6 +144,7 @@ AUTHENTICATION_BACKENDS = (
     #'social_core.backends.google.GoogleOAuth2',
     # Django 
     'django.contrib.auth.backends.ModelBackend',
+    # 'social_core.backends.google.GooglePlusAuth',
 )
 
 SOCIAL_AUTH_FACEBOOK_KEY = '963275077611461' 
@@ -151,10 +152,12 @@ SOCIAL_AUTH_FACEBOOK_SECRET = '48aec68f91cbc7fef8cd900fae774fed'
 #SOCIAL_AUTH_LOGIN_REDIRECT_URL = "/" 
 
 
-LOGIN_URL = 'login'
-LOGOUT_URL = 'logout'
-LOGIN_REDIRECT_URL = 'home'
-
+SOCIAL_AUTH_NEW_USER_REDIRECT_URL = 'polls:admCliente'
+LOGIN_URL = 'polls:entrar'
+LOGOUT_URL = 'polls:salir'
+LOGIN_REDIRECT_URL = 'polls:principal'
+LOGOUT_REDIRECT_URL = 'polls:principal'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')

@@ -1,3 +1,4 @@
+from curses.panel import bottom_panel
 from msilib.schema import CheckBox
 from attr import attr, attrs
 from django import forms
@@ -5,6 +6,9 @@ from .models import *
 import ipywidgets as Nwidgets
 from bootstrap_datepicker_plus.widgets import TimePickerInput
 from django.contrib.auth.forms import UserCreationForm
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Layout
+from crispy_forms import bootstrap
 
 
 # create a ModelForm
@@ -13,6 +17,7 @@ class ClientForm(forms.ModelForm):
     class Meta:
         model = Client
         fields = "__all__"
+        exclude = ['privilegios']
 
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user', None)
@@ -44,6 +49,7 @@ class ContactFormForm(forms.ModelForm):
         model = ContactForm
         fields = "__all__"
 
+
 class BusinessForm(forms.ModelForm):
     # specify the name of model to use
     class Meta:
@@ -61,15 +67,24 @@ class BusinessForm(forms.ModelForm):
         self.fields['cliente'].queryset = Client.objects.filter(user = self.user)
         print(self.fields['cliente'].queryset)
 
+
+
 class BusinesshourdayForm(forms.ModelForm):
     # specify the name of model to use
+
     class Meta:
         model = Businesshourday
         fields = "__all__"
         widgets = {
             'horaAbre': TimePickerInput(),
-            'horaCierra': TimePickerInput()
+            'horaCierra': TimePickerInput(),
+            # 'negocio': forms.Select(attrs={"disabled" : "disabled"})
         }
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["negocio"].disabled = True
+        self.fields["diaSemana"].disabled = True
 
 class BusinessAreaForm(forms.ModelForm):
     # specify the name of model to use
@@ -83,8 +98,14 @@ class BusinessContactFormForm(forms.ModelForm):
         model = BusinessContactForm
         fields = "__all__"
         widgets = {
-            'datosContacto': forms.TextInput(attrs={'placeholder': 'para número incluir el 15, ej: 343154444444'}),
+            'datosContacto': forms.TextInput(attrs={'placeholder': 'para Nº incluir el 15, ej: 343154444444'}),
         }
+
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["formaContacto"].disabled = True
+        self.fields["negocio"].disabled = True
 
 class RegistroForm(UserCreationForm):
     first_name = forms.CharField(max_length=32, help_text='First name')

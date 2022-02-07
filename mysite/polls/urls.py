@@ -24,7 +24,9 @@ urlpatterns = [
     path('negociosPorHorarios/<diaSemana>/<horaAbre>/<horaCierra>', views.filtrarXHorario, name='negociosPorHorarios' ),
 
 
-    path('login/', views.login, name='login'),
+    path('ingresar/', views.login_request, name='entrar'),
+    path('social-auth/', include('social_django.urls', namespace="social")),
+
     path('oauth/', include('social_django.urls', namespace='social')),
 
     path('', views.principal, name='principal'),
@@ -44,6 +46,7 @@ urlpatterns = [
     # --------------------Suscripcion--------------------------------------- #
      path('cargarSuscripcion/', views.cargarSuscripcion, name='cargarSuscripcion'),
      path('listarSuscripciones/', views.listarSuscripciones, name='listarSuscripciones'),
+     path('listarSuscripcionesAdmin/', views.administrarSuscripciones, name='administrarSuscripciones'),
      path('mostrarSuscripcion/<id>', views.mostrarSuscripcion, name='mostrarSuscripcion'),
      path('updateSuscripcion/<id>', views.update_suscripcion, name='update_suscripcion'),
      path('deleteSuscripcion/<id>', views.delete_suscripcion, name='delete_suscripcion'),

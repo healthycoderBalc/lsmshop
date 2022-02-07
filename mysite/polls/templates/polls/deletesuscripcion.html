@@ -7,12 +7,17 @@
 {% block content %}
 
 <!-- Create a Form -->
-<form method="POST">
+<div class="col s12 m6">
+    <form method="POST" class="mb-3">
     <!-- Security token by Django -->
-    {% csrf_token %}
-    Está seguro que desea eliminar este elemento ?
-    <input type="submit" value="Yes" />
-    <a href="/listarSuscripciones/">Cancelar </a>
-</form>
+        {% csrf_token %}
+        <p>¿Está seguro que desea eliminar esta suscripción?</p>
+        <div>
+            <input type="submit" class="btn btn-danger" value="Si, eliminar" />
+        </div>
+    </form>
+
+    <a href="/listarSuscripcionesAdmin/">Cancelar </a>
+</div>
 
 {% endblock %}

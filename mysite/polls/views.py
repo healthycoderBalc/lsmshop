@@ -1,5 +1,6 @@
 
 # Create your views here.
+from re import L
 from typing_extensions import Self
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
@@ -15,6 +16,7 @@ from django.shortcuts import (get_object_or_404,
 from django.contrib import messages
 from django.db.models import Q
 from django.utils import dateparse
+from django.db.models.functions import Lower
 
 # ----------------------------------------------------------------------------------- #
 # ---------------------------------Cliente------------------------------------------- #
@@ -45,13 +47,15 @@ def cargarCliente(request):
 
     return render(request, "polls/cargar.html", context)
 
+
 def listarClientes(request):
     context ={}
  
 
     titulo = "Cliente"
     # add the dictionary during initialization
-    context["dataset"] = Client.objects.all()
+    # context["dataset"] = Client.objects.all()
+    context["dataset"] = Client.objects.order_by(Lower('user__first_name'))
     context["titulo"] = titulo
          
     return render(request, "polls/listarclientes.html", context)
@@ -76,13 +80,13 @@ def update_cliente(request, id):
     obj = get_object_or_404(Client, id = id)
  
     # pass the object as instance in form
-    form = ClientForm(request.POST or None, instance = obj)
+    form = ClientForm(request.POST or None, instance = obj, user = request.user)
  
     # save the data from the form and
     # redirect to detail_view
     if form.is_valid():
         form.save()
-        return HttpResponseRedirect("/mostrarCliente/"+id)
+        return HttpResponseRedirect("/perfilCliente")
  
     # add form dictionary to context
     titulo = "Cliente"
@@ -118,15 +122,41 @@ def delete_cliente(request, id):
 # ---------------------------------Suscripcion--------------------------------------- #
 # ----------------------------------------------------------------------------------- #
 
+def administrarSuscripciones(request):
+    context={}
+
+    # dataset = Business.objects.filter(cliente__id=id)
+    dataset = Subscription.objects.all()
+
+
+    titulo = "Suscripciones"
+
+
+    # add the dictionary during initialization
+    context["dataset"] = dataset
+
+    context["titulo"] = titulo
+    # context["clientecito"] = Client.objects.get(id = id)
+
+    return render(request, "polls/listarsuscripcionesadmin.html", context)
+
+
+
+
 def cargarSuscripcion(request):
     # dictionary for initial data with
     # field names as keys
     context ={}
  
     # add the dictionary during initialization
-    form = SubscriptionForm(request.POST or None)
-    if form.is_valid():
-        form.save()
+    if request.method == 'POST':
+        form = SubscriptionForm(request.POST or None)
+
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('/listarSuscripcionesAdmin/')
+    else:
+        form = SubscriptionForm()
          
 
     titulo = "Suscripcion"
@@ -173,7 +203,7 @@ def update_suscripcion(request, id):
     # redirect to detail_view
     if form.is_valid():
         form.save()
-        return HttpResponseRedirect("/mostrarSuscripcion/"+id)
+        return HttpResponseRedirect("/listarSuscripcionesAdmin/")
  
     # add form dictionary to context
     titulo = "Suscripcion"
@@ -197,7 +227,7 @@ def delete_suscripcion(request, id):
         obj.delete()
         # after deleting redirect to
         # home page
-        return HttpResponseRedirect("/listarSuscripciones/")
+        return HttpResponseRedirect("/listarSuscripcionesAdmin/")
  
     titulo = "Suscripcion"
     context["titulo"] = titulo
@@ -492,7 +522,7 @@ def administrarNegocios(request):
 
     cliente = Client.objects.get(user__pk = request.user.id)
     # dataset = Business.objects.filter(cliente__id=id)
-    dataset = Business.objects.filter(cliente__id=cliente.id)
+    dataset = Business.objects.filter(cliente__id=cliente.id).order_by(Lower('nombre'))
 
 
     titulo = "Mis Negocios"
@@ -538,7 +568,7 @@ def listarNegocios(request):
     # add the dictionary during initialization
     
 
-    context["dataset"] = Business.objects.all()
+    context["dataset"] = Business.objects.order_by('nombre')
     context["titulo"] = titulo
          
     return render(request, "polls/inicio.html", context)
@@ -555,7 +585,7 @@ def mostrarNegocio(request, id):
     contactos = BusinessContactForm.objects.filter(negocio__id=id)
     context["contactos"] = contactos
 
-    horarios = Businesshourday.objects.filter(negocio__id=id)
+    horarios = Businesshourday.objects.filter(negocio__id=id).order_by('diaSemana__id')
     context["horarios"] = horarios
 
     # add the dictionary during initialization
@@ -575,7 +605,7 @@ def mostrarNegocioAdd(request, id):
     contactos = BusinessContactForm.objects.filter(negocio__id=id)
     context["contactos"] = contactos
 
-    horarios = Businesshourday.objects.filter(negocio__id=id)
+    horarios = Businesshourday.objects.filter(negocio__id=id).order_by('diaSemana__id')
     context["horarios"] = horarios
 
     # add the dictionary during initialization
@@ -594,7 +624,7 @@ def update_negocio(request, id):
     obj = get_object_or_404(Business, id = id)
  
     # pass the object as instance in form
-    form = BusinessForm(request.POST or None, instance = obj)
+    form = BusinessForm(request.POST or None, instance = obj, user = request.user)
  
     # save the data from the form and
     # redirect to detail_view
@@ -948,8 +978,8 @@ def principal(request):
     context ={}
     titulo = "LSM Shop"
     context["titulo"] = titulo
-    context["negocios"] = Business.objects.all
-    context["categorias"] = Heading.objects.all
+    context["negocios"] = Business.objects.order_by(Lower('nombre'))
+    context["categorias"] = Heading.objects.all()
 
     return render(request, "polls/inicio.html", context)
 
@@ -959,7 +989,7 @@ def principal(request):
 
 
 def loguincito(request):
-    return render(request, "polls/home.html")
+    return render(request, "polls/login.html")
 
 
 
@@ -986,7 +1016,8 @@ def registro(request):
             usuario = form.save()
             nombre_usuario = form.cleaned_data.get('username')
             messages.success(request, f"Nueva cuenta creada : {nombre_usuario}")
-            login(request, usuario, backend='django.contrib.auth.backends.ModelBackend')
+            login(request, usuario)
+            # backend='django.contrib.auth.backends.ModelBackend'
             return redirect("polls:admCliente")
         else:
             for msg in form.error_messages:
@@ -998,7 +1029,6 @@ def registro(request):
 def salir(request):
     logout(request)
     return redirect("polls:principal")
-
 
 def entrar(request):
     if request.method == "POST":
@@ -1019,6 +1049,10 @@ def entrar(request):
     form = AuthenticationForm()
     return render(request, "polls/entrar.html", {"form": form})
 
+
+def login_request(request):
+    login(request)
+    return render(request, "polls/entrar.html")
 
 # ---------------------------------Perfil del logueado------------------------------- #
 
@@ -1048,9 +1082,9 @@ def buscar(request):
         if query:
             negocios = Business.objects.filter(
                 Q(nombre__icontains=query)
-            )
+            ).order_by(Lower('nombre'))
         else:
-            negocios = Business.objects.all()
+            negocios = Business.objects.order_by(Lower('nombre'))
     print(negocios)
     print(query)
     context["negocios"] = negocios
@@ -1064,7 +1098,7 @@ def buscar(request):
 def filtrarXRubros(request, id):
     context = {}
     rubro = Heading.objects.get(id = id)
-    negocios = Business.objects.filter(rubros__id=id)
+    negocios = Business.objects.filter(rubros__id=id).order_by(Lower('nombre'))
 
     context["dataset"] = negocios
     context["rubro"] = rubro
@@ -1104,7 +1138,7 @@ def filtrarXHorario(request, diaSemana, horaAbre, horaCierra):
     #     print(neg.negocio.nombre)
     #     print("por Dia")
 
-    negociosHorario = negociosDia.filter(horaAbre__lte=horaAbre, horaCierra__gte=horaCierra)
+    negociosHorario = negociosDia.filter(horaAbre__lte=horaAbre, horaCierra__gte=horaCierra).order_by(Lower('negocio__nombre'))
     # for neg in negociosHorario:
     #     print("negocito")
     #     print(neg.negocio.nombre)

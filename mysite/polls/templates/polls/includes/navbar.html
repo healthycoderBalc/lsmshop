@@ -8,20 +8,22 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <div class="navbar-nav">
                 <a class="nav-link" href="/">Inicio</a>
+                <hr class="mt-1 mb-1"/>
                 {% if user.is_authenticated %}
-                    <a class="nav-link" href="/perfilCliente">Perfil de <i>{{user.username}}</i></a>
-                    <a class="nav-link active" aria-current="page" href="/listarNegociosCliente">Mis
+                    <a class="nav-link" href="/perfilCliente">Perfil de <b><i>{{user.username}}</i></b></a>
+                    <a class="nav-link" href="/listarNegociosCliente">Mis
                         Negocios</a>
+                    {% if user.is_superuser %}
+                        <a class="nav-link" href="/listarSuscripcionesAdmin">Administrar Suscripciones</a>
+                        <a class="nav-link" href="/listarClientes">Consultar Clientes</a>
+                    {% endif %}
+                    <hr class="mt-1 mb-1"/>
                     <a class="nav-link" href="/salir">Salir</a>
-
+                    <hr class="mt-1 mb-1"/>
                 {% else %}
+                    <a class="nav-link" href="/ingresar">Ingresar</a>    
                     <a class="nav-link" href="/registrarse">Registrarse</a>
-                    <a class="nav-link" href="/ingresar">Ingresar</a>
-                        <!-- estas solo para verlas, después borrar -->
-                    <a class="nav-link" href="/listarSuscripciones">Suscripciones</a>
-                    <a class="nav-link" href="/listarClientes">Clientes</a>
-
-                        <!-- estas solo para verlas, después borrar -->
+                    
                 {% endif %}
 
             </div>

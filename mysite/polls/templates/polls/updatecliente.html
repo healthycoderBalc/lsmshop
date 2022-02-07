@@ -6,15 +6,23 @@
 
 {% block content %}
 
+{% load crispy_forms_tags %}
+
 <!-- Create a Form -->
-<form method="POST">
-    <!-- Security token by Django -->
-    {% csrf_token %}
+<div class="col s12 m6">
+    <form class="mb-3" method="POST">
+        <!-- Security token by Django -->
+        {% csrf_token %}
 
-    <!-- form as paragraph -->
-    {{ form.as_p }}
-
-    <input type="submit" value="Update" class="btn btn-primary">
-</form>
+        <!-- form as paragraph -->
+        {{ form|crispy }}
+        <br>
+        <div class="d-grid gap-2 d-md-block">
+            <input type="submit" value="Update" class="btn btn-success">
+            <a href="/perfilCliente" class="btn btn-primary">Cancelar</a>
+        </div>
+    </form>
+    
+</div>
 
 {% endblock %}
