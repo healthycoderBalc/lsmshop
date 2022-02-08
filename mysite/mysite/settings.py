@@ -141,6 +141,7 @@ AUTHENTICATION_BACKENDS = (
     'social_core.backends.facebook.FacebookOAuth2', 
     
     # Google 
+    'social_core.backends.google.GoogleOAuth2',
     #'social_core.backends.google.GoogleOAuth2',
     # Django 
     'django.contrib.auth.backends.ModelBackend',
@@ -149,6 +150,12 @@ AUTHENTICATION_BACKENDS = (
 
 SOCIAL_AUTH_FACEBOOK_KEY = '963275077611461' 
 SOCIAL_AUTH_FACEBOOK_SECRET = '48aec68f91cbc7fef8cd900fae774fed' 
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '227947446841-4g2fhgets7n0slto0ntf2pq4a18uvpen.apps.googleusercontent.com'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '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'
+
+
+
 #SOCIAL_AUTH_LOGIN_REDIRECT_URL = "/" 
 
 

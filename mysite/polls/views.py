@@ -654,7 +654,7 @@ def delete_negocio(request, id):
         obj.delete()
         # after deleting redirect to
         # home page
-        return HttpResponseRedirect("/listarNegocios/")
+        return HttpResponseRedirect("/")
  
     titulo = "Negocio"
     context["titulo"] = titulo
@@ -1152,3 +1152,25 @@ def filtrarXHorario(request, diaSemana, horaAbre, horaCierra):
     context["negociosD"] = negociosDia
 
     return render(request, "polls/filtrarhorarios.html", context)
+
+
+    # ---------------------------------Por dia y horario--------------------------------------- #
+
+def buscarCliente(request):
+    context = {}
+    clientes = []
+    if request.method == "GET":
+        query = request.GET.get('q', None)
+        if query:
+            clientes = Client.objects.filter(
+                # Q(telefono__icontains=query)
+                Q(user__first_name__icontains=query) | Q(user__last_name__icontains=query) |Q(user__username__icontains=query)
+            ).order_by(Lower('user__last_name'))
+        else:
+            clientes = Client.objects.order_by(Lower('user__last_name'))
+    print("clientes" + str(clientes))
+    print(query)
+    context["dataset"] = clientes
+    context["query"] = query
+
+    return render(request, "polls/listarClientes.html", context)

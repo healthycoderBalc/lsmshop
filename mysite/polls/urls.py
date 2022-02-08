@@ -19,6 +19,7 @@ urlpatterns = [
     path('ingresar/', views.entrar, name='entrar'),
     path('perfilCliente', views.perfil, name="perfilCliente"),
     path('', views.buscar, name='search_results'),
+    path('listarClientes/', views.buscarCliente, name='search_resultsCliente'),
     path('negociosPorRubro/<id>', views.filtrarXRubros, name='filtrarXRubros'),
     path('seleccionHorarios/', views.seleccionHorarios, name='seleccionHorarios' ),
     path('negociosPorHorarios/<diaSemana>/<horaAbre>/<horaCierra>', views.filtrarXHorario, name='negociosPorHorarios' ),
