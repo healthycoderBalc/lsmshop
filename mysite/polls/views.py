@@ -50,15 +50,27 @@ def cargarCliente(request):
 
 def listarClientes(request):
     context ={}
- 
+    
+    if request.user.is_authenticated:
 
-    titulo = "Cliente"
-    # add the dictionary during initialization
-    # context["dataset"] = Client.objects.all()
-    context["dataset"] = Client.objects.order_by(Lower('user__first_name'))
-    context["titulo"] = titulo
-         
-    return render(request, "polls/listarclientes.html", context)
+        if request.user.is_staff:
+            titulo = "Cliente"
+            # add the dictionary during initialization
+            # context["dataset"] = Client.objects.all()
+            context["dataset"] = Client.objects.order_by(Lower('user__first_name'))
+            context["titulo"] = titulo
+            direccion = "polls/cliente/listarclientes.html"
+            print("staff")
+        else:
+            context["titulo"] = "No autorizado"
+            direccion = "polls/unauthorized.html"
+            print("no staff")
+    else:
+        context["titulo"] = "No autorizado"
+        direccion = "polls/unauthorized.html"
+        print("no user")
+    
+    return render(request, direccion , context)
 
 def mostrarCliente(request, id):
     context ={}
@@ -69,7 +81,7 @@ def mostrarCliente(request, id):
     context["titulo"] = titulo
 
          
-    return render(request, "polls/mostrarcliente.html", context)
+    return render(request, "polls/cliente/mostrarcliente.html", context)
 
 def update_cliente(request, id):
     # dictionary for initial data with
@@ -93,7 +105,7 @@ def update_cliente(request, id):
     context["form"] = form
     context["titulo"] = titulo
  
-    return render(request, "polls/updatecliente.html", context)
+    return render(request, "polls/cliente/updatecliente.html", context)
 
 
 def delete_cliente(request, id):
@@ -115,7 +127,7 @@ def delete_cliente(request, id):
     titulo = "Cliente"
     context["titulo"] = titulo
 
-    return render(request, "polls/deletecliente.html", context)
+    return render(request, "polls/cliente/deletecliente.html", context)
 
 
 # ----------------------------------------------------------------------------------- #
@@ -126,19 +138,30 @@ def administrarSuscripciones(request):
     context={}
 
     # dataset = Business.objects.filter(cliente__id=id)
-    dataset = Subscription.objects.all()
+    if request.user.is_authenticated:
+
+        if request.user.is_staff:
+            dataset = Subscription.objects.all()
 
 
-    titulo = "Suscripciones"
+            titulo = "Suscripciones"
 
 
-    # add the dictionary during initialization
-    context["dataset"] = dataset
+            # add the dictionary during initialization
+            context["dataset"] = dataset
 
-    context["titulo"] = titulo
-    # context["clientecito"] = Client.objects.get(id = id)
+            context["titulo"] = titulo
+            # context["clientecito"] = Client.objects.get(id = id)
+            direccion = "polls/suscripcion/listarsuscripcionesadmin.html"
+        else:
+            context["titulo"] = "No autorizado"
+            direccion = "polls/unauthorized.html"
+    else:
+        context["titulo"] = "No autorizado"
+        direccion = "polls/unauthorized.html"
 
-    return render(request, "polls/listarsuscripcionesadmin.html", context)
+
+    return render(request, direccion, context)
 
 
 
@@ -148,69 +171,116 @@ def cargarSuscripcion(request):
     # field names as keys
     context ={}
  
+    if request.user.is_authenticated:
+
+        if request.user.is_staff:
     # add the dictionary during initialization
-    if request.method == 'POST':
-        form = SubscriptionForm(request.POST or None)
+            if request.method == 'POST':
+                form = SubscriptionForm(request.POST or None)
 
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect('/listarSuscripcionesAdmin/')
+                if form.is_valid():
+                    form.save()
+                    return HttpResponseRedirect('/listarSuscripcionesAdmin/')
+            else:
+                form = SubscriptionForm()
+                
+
+            titulo = "Suscripcion"
+            context['form']= form
+            context["titulo"] = titulo
+            direccion = "polls/cargar.html"
+        else:
+            context["titulo"] = "No autorizado"
+            direccion = "polls/unauthorized.html"
+            print("no staff")
     else:
-        form = SubscriptionForm()
-         
-
-    titulo = "Suscripcion"
-    context['form']= form
-    context["titulo"] = titulo  
+        context["titulo"] = "No autorizado"
+        direccion = "polls/unauthorized.html"
+        print("no user")
 
 
-    return render(request, "polls/cargar.html", context)
+    return render(request, direccion, context)
 
 
 def listarSuscripciones(request):
     context ={}
- 
+    if request.user.is_authenticated:
 
-    titulo = "Suscripcion"
-    # add the dictionary during initialization
-    context["dataset"] = Subscription.objects.all()
-    context["titulo"] = titulo
-         
-    return render(request, "polls/listarsuscripciones.html", context)
+        if request.user.is_staff:
+
+            titulo = "Suscripcion"
+            # add the dictionary during initialization
+            context["dataset"] = Subscription.objects.all()
+            context["titulo"] = titulo
+            direccion = "polls/suscripcion/listarsuscripciones.html"
+        else:
+            context["titulo"] = "No autorizado"
+            direccion = "polls/unauthorized.html"
+            print("no staff")
+    else:
+        context["titulo"] = "No autorizado"
+        direccion = "polls/unauthorized.html"
+        print("no user")
+
+    return render(request, direccion, context)
 
 def mostrarSuscripcion(request, id):
     context ={}
- 
-    titulo = "Suscripcion"
-    # add the dictionary during initialization
-    context["data"] = Subscription.objects.get(id = id)
-    context["titulo"] = titulo
+    if request.user.is_authenticated:
 
-    return render(request, "polls/mostrarsuscripcion.html", context)
+        if request.user.is_staff:
+            titulo = "Suscripcion"
+            # add the dictionary during initialization
+            context["data"] = Subscription.objects.get(id = id)
+            context["titulo"] = titulo
+            direccion = "polls/suscripcion/mostrarsuscripcion.html"
+        else:
+            context["titulo"] = "No autorizado"
+            direccion = "polls/unauthorized.html"
+            print("no staff")
+    else:
+        context["titulo"] = "No autorizado"
+        direccion = "polls/unauthorized.html"
+        print("no user")
+
+
+    return render(request, direccion, context)
 
 def update_suscripcion(request, id):
     # dictionary for initial data with
     # field names as keys
     context ={}
  
+    if request.user.is_authenticated:
+
+        if request.user.is_staff:
     # fetch the object related to passed id
-    obj = get_object_or_404(Subscription, id = id)
+            obj = get_object_or_404(Subscription, id = id)
+        
+            # pass the object as instance in form
+            form = SubscriptionForm(request.POST or None, instance = obj)
+        
+            # save the data from the form and
+            # redirect to detail_view
+            if form.is_valid():
+                form.save()
+                return HttpResponseRedirect("/listarSuscripcionesAdmin/")
+        
+            # add form dictionary to context
+            titulo = "Suscripcion"
+            context["form"] = form
+            context["titulo"] = titulo
+            direccion = "polls/suscripcion/updatesuscripcion.html"
+        else:
+            context["titulo"] = "No autorizado"
+            direccion = "polls/unauthorized.html"
+            print("no staff")
+    else:
+        context["titulo"] = "No autorizado"
+        direccion = "polls/unauthorized.html"
+        print("no user")
  
-    # pass the object as instance in form
-    form = SubscriptionForm(request.POST or None, instance = obj)
- 
-    # save the data from the form and
-    # redirect to detail_view
-    if form.is_valid():
-        form.save()
-        return HttpResponseRedirect("/listarSuscripcionesAdmin/")
- 
-    # add form dictionary to context
-    titulo = "Suscripcion"
-    context["form"] = form
-    context["titulo"] = titulo
- 
-    return render(request, "polls/updatesuscripcion.html", context)
+    return render(request, direccion, context)
 
 
 def delete_suscripcion(request, id):
@@ -218,21 +288,33 @@ def delete_suscripcion(request, id):
     # field names as keys
     context ={}
  
-    # fetch the object related to passed id
-    obj = get_object_or_404(Subscription, id = id)
- 
- 
-    if request.method =="POST":
-        # delete object
-        obj.delete()
-        # after deleting redirect to
-        # home page
-        return HttpResponseRedirect("/listarSuscripcionesAdmin/")
- 
-    titulo = "Suscripcion"
-    context["titulo"] = titulo
+    if request.user.is_authenticated:
 
-    return render(request, "polls/deletesuscripcion.html", context)
+        if request.user.is_staff:
+    # fetch the object related to passed id
+            obj = get_object_or_404(Subscription, id = id)
+        
+        
+            if request.method =="POST":
+                # delete object
+                obj.delete()
+                # after deleting redirect to
+                # home page
+                return HttpResponseRedirect("/listarSuscripcionesAdmin/")
+        
+            titulo = "Suscripcion"
+            context["titulo"] = titulo
+            direccion = "polls/suscripcion/deletesuscripcion.html"
+        else:
+            context["titulo"] = "No autorizado"
+            direccion = "polls/unauthorized.html"
+            print("no staff")
+    else:
+        context["titulo"] = "No autorizado"
+        direccion = "polls/unauthorized.html"
+        print("no user")
+
+    return render(request, direccion, context)
 
 
 
@@ -273,7 +355,7 @@ def listarDiasSemana(request):
     context["dataset"] = Dayweek.objects.all()
     context["titulo"] = titulo
          
-    return render(request, "polls/listardiassemana.html", context)
+    return render(request, "polls/diasemana/listardiassemana.html", context)
 
 def mostrarDiaSemana(request, id):
     context ={}
@@ -283,7 +365,7 @@ def mostrarDiaSemana(request, id):
     context["data"] = Dayweek.objects.get(id = id)
     context["titulo"] = titulo
 
-    return render(request, "polls/mostrardiasemana.html", context)
+    return render(request, "polls//diasemana/mostrardiasemana.html", context)
 
 def update_diasemana(request, id):
     # dictionary for initial data with
@@ -307,7 +389,7 @@ def update_diasemana(request, id):
     context["form"] = form
     context["titulo"] = titulo
  
-    return render(request, "polls/updatediasemana.html", context)
+    return render(request, "polls/diasemana/updatediasemana.html", context)
 
 
 def delete_diasemana(request, id):
@@ -329,7 +411,7 @@ def delete_diasemana(request, id):
     titulo = "Dia Semana"
     context["titulo"] = titulo
 
-    return render(request, "polls/deletediasemana.html", context)
+    return render(request, "polls/diasemana/deletediasemana.html", context)
 
 
 # ----------------------------------------------------------------------------------- #
@@ -364,7 +446,7 @@ def listarRubros(request):
     context["dataset"] = Heading.objects.all()
     context["titulo"] = titulo
          
-    return render(request, "polls/listarrubros.html", context)
+    return render(request, "polls/rubro/listarrubros.html", context)
 
 def mostrarRubro(request, id):
     context ={}
@@ -374,7 +456,7 @@ def mostrarRubro(request, id):
     context["data"] = Heading.objects.get(id = id)
     context["titulo"] = titulo
 
-    return render(request, "polls/mostrarrubro.html", context)
+    return render(request, "polls/rubro/mostrarrubro.html", context)
 
 def update_rubro(request, id):
     # dictionary for initial data with
@@ -398,7 +480,7 @@ def update_rubro(request, id):
     context["form"] = form
     context["titulo"] = titulo
  
-    return render(request, "polls/updaterubro.html", context)
+    return render(request, "polls/rubro/updaterubro.html", context)
 
 
 def delete_rubro(request, id):
@@ -420,7 +502,7 @@ def delete_rubro(request, id):
     titulo = "Rubro"
     context["titulo"] = titulo
 
-    return render(request, "polls/deleterubro.html", context)
+    return render(request, "polls/rubro/deleterubro.html", context)
 
 
 # ----------------------------------------------------------------------------------- #
@@ -454,7 +536,7 @@ def listarFormasContacto(request):
     context["dataset"] = ContactForm.objects.all()
     context["titulo"] = titulo
          
-    return render(request, "polls/listarformascontacto.html", context)
+    return render(request, "polls/formacontacto/listarformascontacto.html", context)
 
 def mostrarFormaContacto(request, id):
     context ={}
@@ -464,7 +546,7 @@ def mostrarFormaContacto(request, id):
     context["data"] = ContactForm.objects.get(id = id)
     context["titulo"] = titulo
 
-    return render(request, "polls/mostrarformacontacto.html", context)
+    return render(request, "polls/formacontacto/mostrarformacontacto.html", context)
 
 def update_formacontacto(request, id):
     # dictionary for initial data with
@@ -488,7 +570,7 @@ def update_formacontacto(request, id):
     context["form"] = form
     context["titulo"] = titulo
  
-    return render(request, "polls/updateformacontacto.html", context)
+    return render(request, "polls/formacontacto/updateformacontacto.html", context)
 
 
 def delete_formacontacto(request, id):
@@ -510,7 +592,7 @@ def delete_formacontacto(request, id):
     titulo = "Forma Contacto"
     context["titulo"] = titulo
 
-    return render(request, "polls/deleteformacontacto.html", context)
+    return render(request, "polls/formacontacto/deleteformacontacto.html", context)
 
 
 # ----------------------------------------------------------------------------------- #
@@ -535,7 +617,7 @@ def administrarNegocios(request):
     context["cliente"] = cliente
     # context["clientecito"] = Client.objects.get(id = id)
 
-    return render(request, "polls/listarnegocioscliente.html", context)
+    return render(request, "polls/negocio/listarnegocioscliente.html", context)
 
 
 def cargarNegocio(request):
@@ -557,7 +639,7 @@ def cargarNegocio(request):
     context['form']= form
     context["titulo"] = titulo
 
-    return render(request, "polls/cargarnegocio.html", context)
+    return render(request, "polls/negocio/cargarnegocio.html", context)
 
 
 def listarNegocios(request):
@@ -592,7 +674,7 @@ def mostrarNegocio(request, id):
     context["data"] = Business.objects.get(id = id)
     context["titulo"] = titulo
 
-    return render(request, "polls/mostrarnegocio.html", context)
+    return render(request, "polls/negocio/mostrarnegocio.html", context)
 
 def mostrarNegocioAdd(request, id):
     context ={}
@@ -612,7 +694,7 @@ def mostrarNegocioAdd(request, id):
     context["data"] = Business.objects.get(id = id)
     context["titulo"] = titulo
 
-    return render(request, "polls/mostrarnegocioadd.html", context)
+    return render(request, "polls/negocio/mostrarnegocioadd.html", context)
 
 
 def update_negocio(request, id):
@@ -637,7 +719,7 @@ def update_negocio(request, id):
     context["form"] = form
     context["titulo"] = titulo
  
-    return render(request, "polls/updatenegocio.html", context)
+    return render(request, "polls/negocio/updatenegocio.html", context)
 
 
 def delete_negocio(request, id):
@@ -659,7 +741,7 @@ def delete_negocio(request, id):
     titulo = "Negocio"
     context["titulo"] = titulo
 
-    return render(request, "polls/deletenegocio.html", context)
+    return render(request, "polls/negocio/deletenegocio.html", context)
 
 
 
@@ -695,7 +777,7 @@ def listarNegocioHorarioDias(request):
     context["dataset"] = Businesshourday.objects.all()
     context["titulo"] = titulo
          
-    return render(request, "polls/listarnegociohorariodias.html", context)
+    return render(request, "polls/intermedio/listarnegociohorariodias.html", context)
 
 def mostrarNegocioHorarioDia(request, id):
     context ={}
@@ -705,7 +787,7 @@ def mostrarNegocioHorarioDia(request, id):
     context["data"] = Businesshourday.objects.get(id = id)
     context["titulo"] = titulo
 
-    return render(request, "polls/mostrarnegociohorariodia.html", context)
+    return render(request, "polls/intermedio/mostrarnegociohorariodia.html", context)
 
 def update_negociohorariodia(request, id):
     # dictionary for initial data with
@@ -729,7 +811,7 @@ def update_negociohorariodia(request, id):
     context["form"] = form
     context["titulo"] = titulo
  
-    return render(request, "polls/updatenegociohorariodia.html", context)
+    return render(request, "polls/intermedio/updatenegociohorariodia.html", context)
 
 
 def delete_negociohorariodia(request, id):
@@ -751,7 +833,7 @@ def delete_negociohorariodia(request, id):
     titulo = "Negocio Horario Dia"
     context["titulo"] = titulo
 
-    return render(request, "polls/deletenegociohorariodia.html", context)
+    return render(request, "polls/intermedio/deletenegociohorariodia.html", context)
 
 
 
@@ -786,7 +868,7 @@ def listarNegocioRubros(request):
     context["dataset"] = BusinessArea.objects.all()
     context["titulo"] = titulo
          
-    return render(request, "polls/listarnegociorubros.html", context)
+    return render(request, "polls/intermedio/listarnegociorubros.html", context)
 
 def mostrarNegocioRubro(request, id):
     context ={}
@@ -796,7 +878,7 @@ def mostrarNegocioRubro(request, id):
     context["data"] = BusinessArea.objects.get(id = id)
     context["titulo"] = titulo
 
-    return render(request, "polls/mostrarnegociorubro.html", context)
+    return render(request, "polls/intermedio/mostrarnegociorubro.html", context)
 
 def update_negociorubro(request, id):
     # dictionary for initial data with
@@ -820,7 +902,7 @@ def update_negociorubro(request, id):
     context["form"] = form
     context["titulo"] = titulo
  
-    return render(request, "polls/updatenegociorubro.html", context)
+    return render(request, "polls/intermedio/updatenegociorubro.html", context)
 
 
 def delete_negociorubro(request, id):
@@ -842,7 +924,7 @@ def delete_negociorubro(request, id):
     titulo = "Negocio Rubro"
     context["titulo"] = titulo
 
-    return render(request, "polls/deletenegociorubro.html", context)
+    return render(request, "polls/intermedio/deletenegociorubro.html", context)
 
 
 # ----------------------------------------------------------------------------------- #
@@ -876,7 +958,7 @@ def listarNegocioFormaContacto(request):
     context["dataset"] = BusinessContactForm.objects.all()
     context["titulo"] = titulo
          
-    return render(request, "polls/listarnegocioformacontactos.html", context)
+    return render(request, "polls/intermedio/listarnegocioformacontactos.html", context)
 
 def mostrarNegocioFormaContacto(request, id):
     context ={}
@@ -886,7 +968,7 @@ def mostrarNegocioFormaContacto(request, id):
     context["data"] = BusinessContactForm.objects.get(id = id)
     context["titulo"] = titulo
 
-    return render(request, "polls/mostrarnegocioformacontacto.html", context)
+    return render(request, "polls/intermedio/mostrarnegocioformacontacto.html", context)
 
 def update_negocioformacontacto(request, id):
     # dictionary for initial data with
@@ -911,7 +993,7 @@ def update_negocioformacontacto(request, id):
     context["form"] = form
     context["titulo"] = titulo
  
-    return render(request, "polls/updatenegocioformacontacto.html", context)
+    return render(request, "polls/intermedio/updatenegocioformacontacto.html", context)
 
 
 def update_negocioformacontactomodal(request, id):
@@ -936,7 +1018,7 @@ def update_negocioformacontactomodal(request, id):
     context["form"] = form
     context["titulo"] = titulo
  
-    return render(request, "polls/updatenegocioformacontactomodal.html", context)
+    return render(request, "polls/intermedio/updatenegocioformacontactomodal.html", context)
 
 
 
@@ -960,7 +1042,7 @@ def delete_negocioformacontacto(request, id):
     titulo = "Negocio Forma Contacto"
     context["titulo"] = titulo
 
-    return render(request, "polls/deletenegocioformacontacto.html", context)
+    return render(request, "polls/intermedio/deletenegocioformacontacto.html", context)
 
 
 
@@ -984,6 +1066,9 @@ def principal(request):
     return render(request, "polls/inicio.html", context)
 
 
+def creditos(request):
+    context ={}
+    return render(request, "polls/creditos.html", context)
 
 
 
@@ -1066,6 +1151,65 @@ def perfil(request):
 
     return render(request, "polls/perfilcliente.html", context)
 
+def update_perfilCliente(request):
+    # dictionary for initial data with
+    # field names as keys
+    context ={}
+ 
+    # fetch the object related to passed id
+    obj = get_object_or_404(Client, user__pk = request.user.id)
+ 
+    # pass the object as instance in form
+    form = ClientForm(request.POST or None, instance = obj, user = request.user)
+ 
+    # save the data from the form and
+    # redirect to detail_view
+    if form.is_valid():
+        form.save()
+        return HttpResponseRedirect("/updateperfilUser")
+ 
+    # add form dictionary to context
+    titulo = "Cliente"
+    context["form"] = form
+    context["titulo"] = titulo
+ 
+    return render(request, "polls/updateperfilCliente.html", context)
+
+def update_perfilUser(request):
+    # dictionary for initial data with
+    # field names as keys
+    context ={}
+ 
+    # fetch the object related to passed id
+    obj = get_object_or_404(User, pk = request.user.id)
+ 
+    # pass the object as instance in form
+    form = PerfilForm(request.POST or None, instance = obj)
+ 
+    # save the data from the form and
+    # redirect to detail_view
+    if form.is_valid():
+        form.save()
+        print("valido")
+        return HttpResponseRedirect("/perfilCliente")
+    else:
+        print("No valido")
+ 
+    # add form dictionary to context
+    titulo = "Cliente"
+    context["form"] = form
+    context["titulo"] = titulo
+ 
+    return render(request, "polls/updateperfilUser.html", context)
+
+
+
+# ---------------------------------Unauthorized-------------------------------------- #
+
+def noAutorizado(request):
+    context = {}
+    return render(request, "polls/unauthorized.html", context)
+
 
 # ----------------------------------------------------------------------------------- #
 # ---------------------------------Busqueda------------------------------------------ #
@@ -1103,7 +1247,7 @@ def filtrarXRubros(request, id):
     context["dataset"] = negocios
     context["rubro"] = rubro
 
-    return render(request, "polls/filtrarrubros.html", context)
+    return render(request, "polls/busqueda/filtrarrubros.html", context)
 
 
 # ---------------------------------Por dia y horario--------------------------------------- #
@@ -1128,7 +1272,7 @@ def seleccionHorarios(request):
     
     context['form']= form
 
-    return render(request, "polls/seleccionhorarios.html", context)
+    return render(request, "polls/busqueda/seleccionhorarios.html", context)
 
 def filtrarXHorario(request, diaSemana, horaAbre, horaCierra):
     context = {}
@@ -1151,26 +1295,39 @@ def filtrarXHorario(request, diaSemana, horaAbre, horaCierra):
     context["dataset"] = negociosHorario
     context["negociosD"] = negociosDia
 
-    return render(request, "polls/filtrarhorarios.html", context)
+    return render(request, "polls/busqueda/filtrarhorarios.html", context)
 
 
     # ---------------------------------Por dia y horario--------------------------------------- #
 
 def buscarCliente(request):
     context = {}
-    clientes = []
-    if request.method == "GET":
-        query = request.GET.get('q', None)
-        if query:
-            clientes = Client.objects.filter(
-                # Q(telefono__icontains=query)
-                Q(user__first_name__icontains=query) | Q(user__last_name__icontains=query) |Q(user__username__icontains=query)
-            ).order_by(Lower('user__last_name'))
-        else:
-            clientes = Client.objects.order_by(Lower('user__last_name'))
-    print("clientes" + str(clientes))
-    print(query)
-    context["dataset"] = clientes
-    context["query"] = query
 
-    return render(request, "polls/listarClientes.html", context)
+    if request.user.is_authenticated:
+        if request.user.is_staff:
+            clientes = []
+            if request.method == "GET":
+                query = request.GET.get('q', None)
+                if query:
+                    clientes = Client.objects.filter(
+                        # Q(telefono__icontains=query)
+                        Q(user__first_name__icontains=query) | Q(user__last_name__icontains=query) |Q(user__username__icontains=query)
+                    ).order_by(Lower('user__last_name'))
+                else:
+                    clientes = Client.objects.order_by(Lower('user__last_name'))
+            print("clientes" + str(clientes))
+            print(query)
+            context["dataset"] = clientes
+            context["query"] = query
+            direccion = "polls/cliente/listarClientes.html"
+        else: 
+            context["titulo"] = "No autorizado"
+            direccion = "polls/unauthorized.html"
+            print("no staff")
+    else:
+        context["titulo"] = "No autorizado"
+        direccion = "polls/unauthorized.html"
+        print("no user")
+
+
+    return render(request, direccion, context)

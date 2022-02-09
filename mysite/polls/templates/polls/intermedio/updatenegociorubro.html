@@ -1,0 +1,26 @@
+{% extends "polls/principal.html" %}
+
+{% block title %}
+<title>{{titulo}}</title>
+{% endblock %}
+
+{% block content %}
+
+{% load crispy_forms_tags %}
+
+<!-- Create a Form -->
+<form method="POST">
+    <!-- Security token by Django -->
+    {% csrf_token %}
+
+    <!-- form as paragraph -->
+    {{ form|crispy }}
+
+    <div class="d-grid gap-2 d-md-block">
+        <input type="submit" value="Modificar" class="btn btn-primary">
+        <a href="/listarNegociorubros" class="btn btn-outline-danger">Cancelar</a>
+    </div>
+
+</form>
+
+{% endblock %}

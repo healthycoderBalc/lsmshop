@@ -1,3 +1,4 @@
+from enum import unique
 from django.db import models
 from django.db.models.fields import EmailField
 from django.contrib.auth.models import User
@@ -8,7 +9,7 @@ class Client(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, default= '')
     # nombre = models.CharField(max_length=200)
     # apellido = models.CharField(max_length=200)
-    cuentaFacebook = models.CharField(max_length=200)
+    #cuentaFacebook = models.CharField(max_length=200)
     # email = models.EmailField(max_length=254)
     telefono = models.CharField(max_length=200)
     # fechaNacimiento = models.DateField('Fecha de Nacimiento')
@@ -29,7 +30,7 @@ class Client(models.Model):
 
 
 class Subscription(models.Model):
-    nombre = models.CharField(max_length=200)
+    nombre = models.CharField(max_length=200, unique=True)
     precioMensual = models.FloatField()
     caracteristicas = models.CharField(max_length=200)
 
@@ -37,32 +38,31 @@ class Subscription(models.Model):
         return self.nombre
      
 class Dayweek(models.Model):
-    dia = models.CharField(max_length=200)
+    dia = models.CharField(max_length=200, unique=True)
 
     def __str__(self):
         return self.dia
 
 
 class ContactForm(models.Model):
-    nombre = models.CharField(max_length=200)
+    nombre = models.CharField(max_length=200, unique=True)
     logo = models.ImageField(upload_to='images/', verbose_name='logo', default='noneyo')
 
     def __str__(self):
         return self.nombre
 
 class Heading(models.Model):
-    nombre = models.CharField(max_length=200)
+    nombre = models.CharField(max_length=200, unique=True)
     
     def __str__(self):
         return self.nombre
 
 class Business(models.Model):
-    nombre = models.CharField(max_length=200)
+    nombre = models.CharField(max_length=200, unique=True)
     direccion = models.CharField(max_length=200)
     fotoNegocio = models.ImageField(upload_to='images/', verbose_name='Foto del Negocio')
-    fotoLogotipo = models.ImageField(upload_to='images/', verbose_name='Logo del Negocio')
     cliente = models.ForeignKey(Client, on_delete=models.CASCADE)
-    suscripcion = models.ForeignKey(Subscription, on_delete=models.CASCADE)
+    suscripcion = models.ForeignKey(Subscription, on_delete=models.SET_DEFAULT, default= '')
     rubros = models.ManyToManyField(Heading, through='BusinessArea')
     formasContacto = models.ManyToManyField(ContactForm, through='BusinessContactForm')
     diasSemana = models.ManyToManyField(Dayweek, through='Businesshourday')

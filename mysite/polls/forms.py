@@ -5,10 +5,11 @@ from django import forms
 from .models import *
 import ipywidgets as Nwidgets
 from bootstrap_datepicker_plus.widgets import TimePickerInput
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, AdminPasswordChangeForm
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout
 from crispy_forms import bootstrap
+
 
 
 # create a ModelForm
@@ -117,8 +118,16 @@ class RegistroForm(UserCreationForm):
         fields = UserCreationForm.Meta.fields + ('first_name', 'last_name', 'email',)
 
 
-
 class DateRangeForm(forms.Form):
     dia = forms.ModelChoiceField(queryset = Dayweek.objects.all())
     start_date = forms.TimeField(required=True, widget=TimePickerInput())
     end_date = forms.TimeField(required=True, widget=TimePickerInput())
+
+class PerfilForm(forms.ModelForm):
+    first_name = forms.CharField(max_length=32, help_text='First name')
+    last_name = forms.CharField(max_length=32, help_text='Last name')
+    email = forms.EmailField(max_length=64, help_text='Enter a valid email address')
+
+    class Meta:
+        model = User
+        fields = UserCreationForm.Meta.fields + ('first_name', 'last_name', 'email',)

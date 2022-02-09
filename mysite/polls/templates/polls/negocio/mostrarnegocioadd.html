@@ -1,0 +1,64 @@
+{% extends "polls/principal.html" %}
+
+{% block title %}
+<title>{{titulo}}</title>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12 col-md-6 mb-3">
+        <div class="card">
+            <div class="card-header justify-content-end">
+                <span class="card-title font-weight-bold"><b>{{ data.nombre }}</b></span>
+            </div>
+            <div class="card-body">
+                <span class="card-title"> <b>Dirección: </b> {{ data.direccion }}</span>
+                <img src="{{ data.fotoNegocio.url }}" class="card-img-top" />
+                <p><b>Rubros: </b></p>
+                <p>{% for rubro in rubros %}
+                        {{ rubro.rubro.nombre }},
+                    {% endfor %}</p>
+
+                <p><b>Contacto: </b></p>
+                    {% for contacto in contactos %}
+                        {% if contacto.datosContacto %}
+                            <p>{{ contacto.formaContacto.nombre }}:
+                                {{ contacto.datosContacto }} 
+                                <a href="/updateNegocioformacontacto/{{contacto.id}}" class="btn btn-outline-success">Modificar</a>
+                            </p>
+                        {% else %}
+                            <p>{{ contacto.formaContacto.nombre }}:
+                                <small>(No se ha añadido)</small>
+                                <a href="/updateNegocioformacontacto/{{contacto.id}}" class="btn btn-warning">Añadir</a>
+                            </p>
+                        {% endif %}
+                    {% endfor %}
+
+                <p><b>Horario: </b></p>
+                    {% for horario in horarios %}
+                        {% if horario.horaAbre and horario.horaCierra %}
+                            <p>
+                                {{ horario.diaSemana.dia }}: {{horario.horaAbre}} - {{horario.horaCierra}}
+                                <a href="/updateNegociohorariodia/{{horario.id}}" class="btn btn-outline-success">Modificar</a>
+                            </p>
+                        {% else %}
+                            <p>{{ horario.diaSemana.dia }}:
+                                <small>(No se ha añadido hora)</small>
+                                <a href="/updateNegociohorariodia/{{horario.id}}" class="btn btn-warning">Añadir</a>
+                            </p>
+                        {% endif %}
+                    {% endfor %}
+
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2 d-md-block">
+                    <a href="/listarNegociosCliente/" class="btn btn-outline-primary">Volver</a>
+                    <a href="/updateNegocio/{{data.id}}" class="btn btn-primary">Modificar</a>
+                    <a href="/deleteNegocio/{{data.id}}" class="btn btn-danger">Eliminar</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

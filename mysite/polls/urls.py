@@ -17,7 +17,10 @@ urlpatterns = [
     path('registrarse/', views.registro, name='registro'),
     path('salir/', views.salir, name='salir'),
     path('ingresar/', views.entrar, name='entrar'),
+    path('unauthorized/', views.noAutorizado, name='unauthorized'),
     path('perfilCliente', views.perfil, name="perfilCliente"),
+    path('updateperfilCliente/', views.update_perfilCliente, name="updateperfilCliente"),
+    path('updateperfilUser/', views.update_perfilUser, name="updateperfilCliente"),
     path('', views.buscar, name='search_results'),
     path('listarClientes/', views.buscarCliente, name='search_resultsCliente'),
     path('negociosPorRubro/<id>', views.filtrarXRubros, name='filtrarXRubros'),
@@ -31,6 +34,7 @@ urlpatterns = [
     path('oauth/', include('social_django.urls', namespace='social')),
 
     path('', views.principal, name='principal'),
+    path('creditos/', views.creditos, name='creditos'),
     
     #path('logout/', views.logout, name="user-logout"),
     path('loguincito/', views.loguincito, name="loguincito"),
