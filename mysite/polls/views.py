@@ -332,18 +332,35 @@ def cargarDiaSemana(request):
     # dictionary for initial data with
     # field names as keys
     context ={}
- 
+    if request.user.is_authenticated:
+
+        if request.user.is_staff:
     # add the dictionary during initialization
-    form = DayweekForm(request.POST or None)
-    if form.is_valid():
-        form.save()
-         
+            if request.method == 'POST':
+                form = DayweekForm(request.POST or None)
+                if form.is_valid():
+                    form.save()
+                    return HttpResponseRedirect('/mostrarDiasemana/'+ str(form.instance.pk))
+            else:
+                form = DayweekForm()
+                
 
-    titulo = "Dia Semana"
-    context['form']= form
-    context["titulo"] = titulo
+            titulo = "Dia Semana"
+            context['form']= form
+            context["titulo"] = titulo
+            direccion = "polls/cargar.html"
 
-    return render(request, "polls/cargar.html", context)
+        else:
+            context["titulo"] = "No autorizado"
+            direccion = "polls/unauthorized.html"
+            print("no staff")
+    else:
+        context["titulo"] = "No autorizado"
+        direccion = "polls/unauthorized.html"
+        print("no user")
+
+
+    return render(request, direccion, context)
 
 
 def listarDiasSemana(request):
@@ -372,46 +389,72 @@ def update_diasemana(request, id):
     # field names as keys
     context ={}
  
+    if request.user.is_authenticated:
+
+        if request.user.is_staff:
+
     # fetch the object related to passed id
-    obj = get_object_or_404(Dayweek, id = id)
+            obj = get_object_or_404(Dayweek, id = id)
+        
+            # pass the object as instance in form
+            form = DayweekForm(request.POST or None, instance = obj)
+        
+            # save the data from the form and
+            # redirect to detail_view
+            if form.is_valid():
+                form.save()
+                return HttpResponseRedirect("/mostrarDiasemana/"+id)
+        
+            # add form dictionary to context
+            titulo = "Dia Semana"
+            context["form"] = form
+            context["titulo"] = titulo
+
+            direccion = "polls/diasemana/updatediasemana.html"
+        else:
+            context["titulo"] = "No autorizado"
+            direccion = "polls/unauthorized.html"
+            print("no staff")
+    else:
+        context["titulo"] = "No autorizado"
+        direccion = "polls/unauthorized.html"
+        print("no user")
  
-    # pass the object as instance in form
-    form = DayweekForm(request.POST or None, instance = obj)
- 
-    # save the data from the form and
-    # redirect to detail_view
-    if form.is_valid():
-        form.save()
-        return HttpResponseRedirect("/mostrarDiasemana/"+id)
- 
-    # add form dictionary to context
-    titulo = "Dia Semana"
-    context["form"] = form
-    context["titulo"] = titulo
- 
-    return render(request, "polls/diasemana/updatediasemana.html", context)
+    return render(request, direccion, context)
 
 
 def delete_diasemana(request, id):
     # dictionary for initial data with
     # field names as keys
     context ={}
- 
-    # fetch the object related to passed id
-    obj = get_object_or_404(Dayweek, id = id)
- 
- 
-    if request.method =="POST":
-        # delete object
-        obj.delete()
-        # after deleting redirect to
-        # home page
-        return HttpResponseRedirect("/listarDiassemana/")
- 
-    titulo = "Dia Semana"
-    context["titulo"] = titulo
+    if request.user.is_authenticated:
 
-    return render(request, "polls/diasemana/deletediasemana.html", context)
+        if request.user.is_staff:
+    # fetch the object related to passed id
+            obj = get_object_or_404(Dayweek, id = id)
+        
+        
+            if request.method =="POST":
+                # delete object
+                obj.delete()
+                # after deleting redirect to
+                # home page
+                return HttpResponseRedirect("/listarDiassemana/")
+        
+            titulo = "Dia Semana"
+            context["titulo"] = titulo
+            direccion = "polls/diasemana/deletediasemana.html"
+
+        else:
+            context["titulo"] = "No autorizado"
+            direccion = "polls/unauthorized.html"
+            print("no staff")
+    else:
+        context["titulo"] = "No autorizado"
+        direccion = "polls/unauthorized.html"
+        print("no user")
+
+    return render(request, direccion, context)
 
 
 # ----------------------------------------------------------------------------------- #
@@ -423,18 +466,33 @@ def cargarRubro(request):
     # dictionary for initial data with
     # field names as keys
     context ={}
- 
+    if request.user.is_authenticated:
+
+        if request.user.is_staff:
     # add the dictionary during initialization
-    form = HeadingForm(request.POST or None)
-    if form.is_valid():
-        form.save()
-    
-    titulo = "Rubro"
-    context['form']= form
-    context["titulo"] = titulo
+            if request.method == 'POST':
+                form = HeadingForm(request.POST or None)
+                if form.is_valid():
+                    form.save()
+                    return HttpResponseRedirect('/mostrarRubro/'+ str(form.instance.pk))
+            else:
+                form = HeadingForm()
+            
+            titulo = "Rubro"
+            context['form']= form
+            context["titulo"] = titulo
+            direccion = "polls/cargar.html"
 
+        else:
+            context["titulo"] = "No autorizado"
+            direccion = "polls/unauthorized.html"
+            print("no staff")
+    else:
+        context["titulo"] = "No autorizado"
+        direccion = "polls/unauthorized.html"
+        print("no user")
 
-    return render(request, "polls/cargar.html", context)
+    return render(request, direccion, context)
 
 
 def listarRubros(request):
@@ -462,25 +520,39 @@ def update_rubro(request, id):
     # dictionary for initial data with
     # field names as keys
     context ={}
- 
+    if request.user.is_authenticated:
+
+        if request.user.is_staff:
     # fetch the object related to passed id
-    obj = get_object_or_404(Heading, id = id)
+            obj = get_object_or_404(Heading, id = id)
+        
+            # pass the object as instance in form
+            form = HeadingForm(request.POST or None, instance = obj)
+        
+            # save the data from the form and
+            # redirect to detail_view
+            if form.is_valid():
+                form.save()
+                return HttpResponseRedirect("/mostrarRubro/"+id)
+        
+            # add form dictionary to context
+            titulo = "Rubro"
+            context["form"] = form
+            context["titulo"] = titulo
  
-    # pass the object as instance in form
-    form = HeadingForm(request.POST or None, instance = obj)
- 
-    # save the data from the form and
-    # redirect to detail_view
-    if form.is_valid():
-        form.save()
-        return HttpResponseRedirect("/mostrarRubro/"+id)
- 
-    # add form dictionary to context
-    titulo = "Rubro"
-    context["form"] = form
-    context["titulo"] = titulo
- 
-    return render(request, "polls/rubro/updaterubro.html", context)
+            direccion = "polls/rubro/updaterubro.html"
+
+        else:
+            context["titulo"] = "No autorizado"
+            direccion = "polls/unauthorized.html"
+            print("no staff")
+    else:
+        context["titulo"] = "No autorizado"
+        direccion = "polls/unauthorized.html"
+        print("no user")
+
+
+    return render(request, direccion, context)
 
 
 def delete_rubro(request, id):
@@ -488,21 +560,37 @@ def delete_rubro(request, id):
     # field names as keys
     context ={}
  
-    # fetch the object related to passed id
-    obj = get_object_or_404(Heading, id = id)
- 
- 
-    if request.method =="POST":
-        # delete object
-        obj.delete()
-        # after deleting redirect to
-        # home page
-        return HttpResponseRedirect("/listarRubros/")
- 
-    titulo = "Rubro"
-    context["titulo"] = titulo
 
-    return render(request, "polls/rubro/deleterubro.html", context)
+    if request.user.is_authenticated:
+
+        if request.user.is_staff:
+    # fetch the object related to passed id
+            obj = get_object_or_404(Heading, id = id)
+        
+        
+            if request.method =="POST":
+                # delete object
+                obj.delete()
+                # after deleting redirect to
+                # home page
+                return HttpResponseRedirect("/listarRubros/")
+        
+            titulo = "Rubro"
+            context["titulo"] = titulo
+
+            direccion = "polls/rubro/deleterubro.html"
+
+        else:
+            context["titulo"] = "No autorizado"
+            direccion = "polls/unauthorized.html"
+            print("no staff")
+    else:
+        context["titulo"] = "No autorizado"
+        direccion = "polls/unauthorized.html"
+        print("no user")
+
+
+    return render(request, direccion, context)
 
 
 # ----------------------------------------------------------------------------------- #
@@ -513,18 +601,35 @@ def cargarFormaContacto(request):
     # dictionary for initial data with
     # field names as keys
     context ={}
- 
+    if request.user.is_authenticated:
+
+        if request.user.is_staff:
     # add the dictionary during initialization
-    form = ContactFormForm(request.POST or None)
-    if form.is_valid():
-        form.save()
-         
-    titulo = "Forma Contacto"
+            if request.method == 'POST':
+                form = ContactFormForm(request.POST or None)
+                if form.is_valid():
+                    form.save()
+                    return HttpResponseRedirect('/mostrarFormacontacto/'+ str(form.instance.pk))
+            else:
+                form = ContactFormForm()
+            
+            titulo = "Forma Contacto"
+            context['form']= form
+            context["titulo"] = titulo
+            direccion = "polls/cargar.html"
 
-    context['form']= form
-    context["titulo"] = titulo
+        else:
+            context["titulo"] = "No autorizado"
+            direccion = "polls/unauthorized.html"
+            print("no staff")
+    else:
+        context["titulo"] = "No autorizado"
+        direccion = "polls/unauthorized.html"
+        print("no user")
 
-    return render(request, "polls/cargar.html", context)
+
+
+    return render(request, direccion, context)
 
 
 def listarFormasContacto(request):
@@ -553,46 +658,76 @@ def update_formacontacto(request, id):
     # field names as keys
     context ={}
  
+    if request.user.is_authenticated:
+
+        if request.user.is_staff:
+
     # fetch the object related to passed id
-    obj = get_object_or_404(ContactForm, id = id)
- 
-    # pass the object as instance in form
-    form = ContactFormForm(request.POST or None, instance = obj)
- 
-    # save the data from the form and
-    # redirect to detail_view
-    if form.is_valid():
-        form.save()
-        return HttpResponseRedirect("/mostrarFormacontacto/"+id)
- 
-    # add form dictionary to context
-    titulo = "Forma Contacto"
-    context["form"] = form
-    context["titulo"] = titulo
- 
-    return render(request, "polls/formacontacto/updateformacontacto.html", context)
+            obj = get_object_or_404(ContactForm, id = id)
+        
+            # pass the object as instance in form
+            form = ContactFormForm(request.POST or None, instance = obj)
+        
+            # save the data from the form and
+            # redirect to detail_view
+            if form.is_valid():
+                form.save()
+                return HttpResponseRedirect("/mostrarFormacontacto/"+id)
+        
+            # add form dictionary to context
+            titulo = "Forma Contacto"
+            context["form"] = form
+            context["titulo"] = titulo
+            direccion = "polls/formacontacto/updateformacontacto.html"
+
+        else:
+            context["titulo"] = "No autorizado"
+            direccion = "polls/unauthorized.html"
+            print("no staff")
+    else:
+        context["titulo"] = "No autorizado"
+        direccion = "polls/unauthorized.html"
+        print("no user")
+
+
+    return render(request, direccion, context)
 
 
 def delete_formacontacto(request, id):
     # dictionary for initial data with
     # field names as keys
     context ={}
- 
-    # fetch the object related to passed id
-    obj = get_object_or_404(ContactForm, id = id)
- 
- 
-    if request.method =="POST":
-        # delete object
-        obj.delete()
-        # after deleting redirect to
-        # home page
-        return HttpResponseRedirect("/listarFormascontacto/")
- 
-    titulo = "Forma Contacto"
-    context["titulo"] = titulo
+    if request.user.is_authenticated:
 
-    return render(request, "polls/formacontacto/deleteformacontacto.html", context)
+        if request.user.is_staff:
+    # fetch the object related to passed id
+            obj = get_object_or_404(ContactForm, id = id)
+        
+        
+            if request.method =="POST":
+                # delete object
+                obj.delete()
+                # after deleting redirect to
+                # home page
+                return HttpResponseRedirect("/listarFormascontacto/")
+        
+            titulo = "Forma Contacto"
+            context["titulo"] = titulo
+
+            direccion = "polls/formacontacto/deleteformacontacto.html"
+
+        else:
+            context["titulo"] = "No autorizado"
+            direccion = "polls/unauthorized.html"
+            print("no staff")
+    else:
+        context["titulo"] = "No autorizado"
+        direccion = "polls/unauthorized.html"
+        print("no user")
+
+
+
+    return render(request, direccion, context)
 
 
 # ----------------------------------------------------------------------------------- #
@@ -602,22 +737,23 @@ def delete_formacontacto(request, id):
 def administrarNegocios(request):
     context={}
 
-    cliente = Client.objects.get(user__pk = request.user.id)
+    if request.user.is_authenticated:
+        cliente = Client.objects.get(user__pk = request.user.id)
     # dataset = Business.objects.filter(cliente__id=id)
-    dataset = Business.objects.filter(cliente__id=cliente.id).order_by(Lower('nombre'))
+        dataset = Business.objects.filter(cliente__id=cliente.id).order_by(Lower('nombre'))
+        titulo = "Mis Negocios"
+        # add the dictionary during initialization
+        context["dataset"] = dataset
+        context["titulo"] = titulo
+        context["cliente"] = cliente
+        # context["clientecito"] = Client.objects.get(id = id)
+        direccion = "polls/negocio/listarnegocioscliente.html"
+    else:
+        context["titulo"] = "No autorizado"
+        direccion = "polls/unauthorized.html"
+        print("no user")
 
-
-    titulo = "Mis Negocios"
-
-
-    # add the dictionary during initialization
-    context["dataset"] = dataset
-
-    context["titulo"] = titulo
-    context["cliente"] = cliente
-    # context["clientecito"] = Client.objects.get(id = id)
-
-    return render(request, "polls/negocio/listarnegocioscliente.html", context)
+    return render(request, direccion, context)
 
 
 def cargarNegocio(request):
@@ -626,20 +762,27 @@ def cargarNegocio(request):
     context ={}
     # idN = None
     # add the dictionary during initialization
-    if request.method == 'POST':
-        form = BusinessForm(request.POST or None, request.FILES, user = request.user)
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect('/mostrarNegocioAdd/'+ str(form.instance.pk))
+    if request.user.is_authenticated:
+        if request.method == 'POST':
+            form = BusinessForm(request.POST or None, request.FILES, user = request.user)
+            if form.is_valid():
+                form.save()
+                return HttpResponseRedirect('/mostrarNegocioAdd/'+ str(form.instance.pk))
+        else:
+            form = BusinessForm(user = request.user)
+            
+
+        titulo = "Negocio"
+        context['form']= form
+        context["titulo"] = titulo
+        direccion = "polls/negocio/cargarnegocio.html"
     else:
-        form = BusinessForm(user = request.user)
-         
+        context["titulo"] = "No autorizado"
+        direccion = "polls/unauthorized.html"
+        print("no user")
 
-    titulo = "Negocio"
-    context['form']= form
-    context["titulo"] = titulo
 
-    return render(request, "polls/negocio/cargarnegocio.html", context)
+    return render(request, direccion, context)
 
 
 def listarNegocios(request):
@@ -678,23 +821,40 @@ def mostrarNegocio(request, id):
 
 def mostrarNegocioAdd(request, id):
     context ={}
- 
-    titulo = "Negocio"
 
-    rubros = BusinessArea.objects.filter(negocio__id=id)
-    context["rubros"] = rubros 
+    
 
-    contactos = BusinessContactForm.objects.filter(negocio__id=id)
-    context["contactos"] = contactos
+    if request.user.is_authenticated:
+        cliente = Client.objects.get(user__pk = request.user.id)
+        negocio = Business.objects.get(id = id)
+        if negocio.cliente == cliente:
+            titulo = "Negocio"
 
-    horarios = Businesshourday.objects.filter(negocio__id=id).order_by('diaSemana__id')
-    context["horarios"] = horarios
+            rubros = BusinessArea.objects.filter(negocio__id=id)
+            context["rubros"] = rubros 
 
-    # add the dictionary during initialization
-    context["data"] = Business.objects.get(id = id)
-    context["titulo"] = titulo
+            contactos = BusinessContactForm.objects.filter(negocio__id=id)
+            context["contactos"] = contactos
 
-    return render(request, "polls/negocio/mostrarnegocioadd.html", context)
+            horarios = Businesshourday.objects.filter(negocio__id=id).order_by('diaSemana__id')
+            context["horarios"] = horarios
+
+            # add the dictionary during initialization
+            context["data"] = Business.objects.get(id = id)
+            context["titulo"] = titulo
+            direccion = "polls/negocio/mostrarnegocioadd.html"
+        else:
+            context["titulo"] = "No autorizado"
+            direccion = "polls/unauthorized.html"
+            print("no user")
+    else:
+        context["titulo"] = "No autorizado"
+        direccion = "polls/unauthorized.html"
+        print("no user")
+
+
+
+    return render(request, direccion, context)
 
 
 def update_negocio(request, id):
@@ -702,24 +862,40 @@ def update_negocio(request, id):
     # field names as keys
     context ={}
  
+    
+
+    if request.user.is_authenticated:
+        cliente = Client.objects.get(user__pk = request.user.id)
+        negocio = Business.objects.get(id = id)
+        if negocio.cliente == cliente:
     # fetch the object related to passed id
-    obj = get_object_or_404(Business, id = id)
+            obj = get_object_or_404(Business, id = id)
+        
+            # pass the object as instance in form
+            form = BusinessForm(request.POST or None, instance = obj, user = request.user)
+        
+            # save the data from the form and
+            # redirect to detail_view
+            if form.is_valid():
+                form.save()
+                return HttpResponseRedirect("/mostrarNegocioAdd/"+id)
+        
+            # add form dictionary to context
+            titulo = "Negocio"
+            context["form"] = form
+            context["titulo"] = titulo
+            direccion = "polls/negocio/updatenegocio.html"
+
+        else:
+            context["titulo"] = "No autorizado"
+            direccion = "polls/unauthorized.html"
+            print("no user")
+    else:
+        context["titulo"] = "No autorizado"
+        direccion = "polls/unauthorized.html"
+        print("no user")
  
-    # pass the object as instance in form
-    form = BusinessForm(request.POST or None, instance = obj, user = request.user)
- 
-    # save the data from the form and
-    # redirect to detail_view
-    if form.is_valid():
-        form.save()
-        return HttpResponseRedirect("/mostrarNegocioAdd/"+id)
- 
-    # add form dictionary to context
-    titulo = "Negocio"
-    context["form"] = form
-    context["titulo"] = titulo
- 
-    return render(request, "polls/negocio/updatenegocio.html", context)
+    return render(request, direccion, context)
 
 
 def delete_negocio(request, id):
@@ -727,21 +903,37 @@ def delete_negocio(request, id):
     # field names as keys
     context ={}
  
-    # fetch the object related to passed id
-    obj = get_object_or_404(Business, id = id)
- 
- 
-    if request.method =="POST":
-        # delete object
-        obj.delete()
-        # after deleting redirect to
-        # home page
-        return HttpResponseRedirect("/")
- 
-    titulo = "Negocio"
-    context["titulo"] = titulo
 
-    return render(request, "polls/negocio/deletenegocio.html", context)
+    if request.user.is_authenticated:
+        cliente = Client.objects.get(user__pk = request.user.id)
+        negocio = Business.objects.get(id = id)
+        if negocio.cliente == cliente:
+
+            # fetch the object related to passed id
+            obj = get_object_or_404(Business, id = id)
+        
+        
+            if request.method =="POST":
+                # delete object
+                obj.delete()
+                # after deleting redirect to
+                # home page
+                return HttpResponseRedirect("/")
+        
+            titulo = "Negocio"
+            context["titulo"] = titulo
+            direccion = "polls/negocio/deletenegocio.html"
+
+        else:
+            context["titulo"] = "No autorizado"
+            direccion = "polls/unauthorized.html"
+            print("no user")
+    else:
+        context["titulo"] = "No autorizado"
+        direccion = "polls/unauthorized.html"
+        print("no user")
+
+    return render(request, direccion, context)
 
 
 
@@ -754,18 +946,28 @@ def cargarNegocioHoraDia(request):
     # field names as keys
     context ={}
  
+    if request.user.is_authenticated:
+
     # add the dictionary during initialization
-    form = BusinesshourdayForm(request.POST or None)
-    if form.is_valid():
-        form.save()
-         
+        if request.method == 'POST':
+            form = BusinesshourdayForm(request.POST or None)
+            if form.is_valid():
+                form.save()
+                return HttpResponseRedirect('/mostrarNegociohorariodia/'+ str(form.instance.pk))
+        else:
+            form = BusinesshourdayForm()
 
-    titulo = "Negocio Horario Dia"
-    context['form']= form
-    context["titulo"] = titulo
+        titulo = "Negocio Horario Dia"
+        context['form']= form
+        context["titulo"] = titulo
+        direccion = "polls/cargar.html"
 
-    
-    return render(request, "polls/cargar.html", context)
+    else:
+        context["titulo"] = "No autorizado"
+        direccion = "polls/unauthorized.html"
+        print("no user")
+
+    return render(request, direccion, context)
 
 
 def listarNegocioHorarioDias(request):
@@ -793,47 +995,75 @@ def update_negociohorariodia(request, id):
     # dictionary for initial data with
     # field names as keys
     context ={}
- 
+    
+    if request.user.is_authenticated:
+        cliente = Client.objects.get(user__pk = request.user.id)
+        negocioHD = Businesshourday.objects.get(id = id)
+        negocio = Business.objects.get(id = negocioHD.negocio.id)
+        if negocio.cliente == cliente:
     # fetch the object related to passed id
-    obj = get_object_or_404(Businesshourday, id = id)
- 
-    # pass the object as instance in form
-    form = BusinesshourdayForm(request.POST or None, instance = obj)
- 
-    # save the data from the form and
-    # redirect to detail_view
-    if form.is_valid():
-        form.save()
-        return HttpResponseRedirect("/mostrarNegocioAdd/"+str(Businesshourday.objects.get(id=id).negocio_id))
- 
-    # add form dictionary to context
-    titulo = "Negocio Horario Dia"
-    context["form"] = form
-    context["titulo"] = titulo
- 
-    return render(request, "polls/intermedio/updatenegociohorariodia.html", context)
+            obj = get_object_or_404(Businesshourday, id = id)
+        
+            # pass the object as instance in form
+            form = BusinesshourdayForm(request.POST or None, instance = obj)
+        
+            # save the data from the form and
+            # redirect to detail_view
+            if form.is_valid():
+                form.save()
+                return HttpResponseRedirect("/mostrarNegocioAdd/"+str(Businesshourday.objects.get(id=id).negocio_id))
+        
+            # add form dictionary to context
+            titulo = "Negocio Horario Dia"
+            context["form"] = form
+            context["titulo"] = titulo
+            direccion = "polls/intermedio/updatenegociohorariodia.html"
+        else:
+            context["titulo"] = "No autorizado"
+            direccion = "polls/unauthorized.html"
+            print("no user")
+    else:
+        context["titulo"] = "No autorizado"
+        direccion = "polls/unauthorized.html"
+        print("no user")
+
+    return render(request, direccion, context)
 
 
 def delete_negociohorariodia(request, id):
     # dictionary for initial data with
     # field names as keys
     context ={}
- 
+    
+    if request.user.is_authenticated:
+        cliente = Client.objects.get(user__pk = request.user.id)
+        negocioHD = Businesshourday.objects.get(id = id)
+        negocio = Business.objects.get(id = negocioHD.negocio.id)
+        if negocio.cliente == cliente:
     # fetch the object related to passed id
-    obj = get_object_or_404(Businesshourday, id = id)
- 
- 
-    if request.method =="POST":
-        # delete object
-        obj.delete()
-        # after deleting redirect to
-        # home page
-        return HttpResponseRedirect("/listarNegociohorariodias/")
- 
-    titulo = "Negocio Horario Dia"
-    context["titulo"] = titulo
+            obj = get_object_or_404(Businesshourday, id = id)
+        
+        
+            if request.method =="POST":
+                # delete object
+                obj.delete()
+                # after deleting redirect to
+                # home page
+                return HttpResponseRedirect("/listarNegociohorariodias/")
+        
+            titulo = "Negocio Horario Dia"
+            context["titulo"] = titulo
+            direccion = "polls/intermedio/deletenegociohorariodia.html"
+        else:
+            context["titulo"] = "No autorizado"
+            direccion = "polls/unauthorized.html"
+            print("no user")
+    else:
+        context["titulo"] = "No autorizado"
+        direccion = "polls/unauthorized.html"
+        print("no user")
 
-    return render(request, "polls/intermedio/deletenegociohorariodia.html", context)
+    return render(request, direccion, context)
 
 
 
@@ -847,16 +1077,26 @@ def cargarNegocioRubro(request):
     # field names as keys
     context ={}
  
+    if request.user.is_authenticated:
     # add the dictionary during initialization
-    form = BusinessAreaForm(request.POST or None)
-    if form.is_valid():
-        form.save()
-    
-    titulo = "Negocio Rubro"
-    context['form']= form
-    context["titulo"] = titulo
+        if request.method == 'POST':
+            form = BusinessAreaForm(request.POST or None)
+            if form.is_valid():
+                form.save()
+                return HttpResponseRedirect('/mostrarNegociorubro/'+ str(form.instance.pk))
+        else:
+            form = BusinessAreaForm()
+        
+        titulo = "Negocio Rubro"
+        context['form']= form
+        context["titulo"] = titulo
+        direccion = "polls/cargar.html"
+    else:
+        context["titulo"] = "No autorizado"
+        direccion = "polls/unauthorized.html"
+        print("no user")
 
-    return render(request, "polls/cargar.html", context)
+    return render(request, direccion, context)
 
 
 def listarNegocioRubros(request):
@@ -885,24 +1125,41 @@ def update_negociorubro(request, id):
     # field names as keys
     context ={}
  
+    
+    if request.user.is_authenticated:
+        cliente = Client.objects.get(user__pk = request.user.id)
+        negocioR = BusinessArea.objects.get(id = id)
+        negocio = Business.objects.get(id = negocioR.negocio.id)
+        if negocio.cliente == cliente:
     # fetch the object related to passed id
-    obj = get_object_or_404(BusinessArea, id = id)
+            obj = get_object_or_404(BusinessArea, id = id)
+            
+            # pass the object as instance in form
+            form = BusinessAreaForm(request.POST or None, instance = obj)
+        
+            # save the data from the form and
+            # redirect to detail_view
+            if form.is_valid():
+                form.save()
+                return HttpResponseRedirect("/mostrarNegociorubro/"+id)
+        
+            # add form dictionary to context
+            titulo = "Negocio Rubro"
+            context["form"] = form
+            context["titulo"] = titulo
+            direccion = "polls/intermedio/updatenegociorubro.html"
  
-    # pass the object as instance in form
-    form = BusinessAreaForm(request.POST or None, instance = obj)
- 
-    # save the data from the form and
-    # redirect to detail_view
-    if form.is_valid():
-        form.save()
-        return HttpResponseRedirect("/mostrarNegociorubro/"+id)
- 
-    # add form dictionary to context
-    titulo = "Negocio Rubro"
-    context["form"] = form
-    context["titulo"] = titulo
- 
-    return render(request, "polls/intermedio/updatenegociorubro.html", context)
+        else:
+            context["titulo"] = "No autorizado"
+            direccion = "polls/unauthorized.html"
+            print("no user")
+    else:
+        context["titulo"] = "No autorizado"
+        direccion = "polls/unauthorized.html"
+        print("no user")
+
+
+    return render(request, direccion, context)
 
 
 def delete_negociorubro(request, id):
@@ -910,21 +1167,37 @@ def delete_negociorubro(request, id):
     # field names as keys
     context ={}
  
-    # fetch the object related to passed id
-    obj = get_object_or_404(BusinessArea, id = id)
- 
- 
-    if request.method =="POST":
-        # delete object
-        obj.delete()
-        # after deleting redirect to
-        # home page
-        return HttpResponseRedirect("/listarNegociorubros/")
- 
-    titulo = "Negocio Rubro"
-    context["titulo"] = titulo
+    
+    if request.user.is_authenticated:
+        cliente = Client.objects.get(user__pk = request.user.id)
+        negocioR = BusinessArea.objects.get(id = id)
+        negocio = Business.objects.get(id = negocioR.negocio.id)
+        if negocio.cliente == cliente:
 
-    return render(request, "polls/intermedio/deletenegociorubro.html", context)
+            # fetch the object related to passed id
+            obj = get_object_or_404(BusinessArea, id = id)
+        
+        
+            if request.method =="POST":
+                # delete object
+                obj.delete()
+                # after deleting redirect to
+                # home page
+                return HttpResponseRedirect("/listarNegociorubros/")
+        
+            titulo = "Negocio Rubro"
+            context["titulo"] = titulo
+            direccion = "polls/intermedio/deletenegociorubro.html"
+        else:
+            context["titulo"] = "No autorizado"
+            direccion = "polls/unauthorized.html"
+            print("no user")
+    else:
+        context["titulo"] = "No autorizado"
+        direccion = "polls/unauthorized.html"
+        print("no user")
+
+    return render(request, direccion, context)
 
 
 # ----------------------------------------------------------------------------------- #
@@ -936,17 +1209,28 @@ def cargarNegocioFormaContacto(request):
     # field names as keys
     context ={}
  
+    if request.user.is_authenticated:
     # add the dictionary during initialization
-    form = BusinessContactFormForm(request.POST or None)
-    if form.is_valid():
-        form.save()
-         
-    titulo = "Negocio Forma Contacto"
-    context['form']= form
-    context["titulo"] = titulo
+        if request.method == 'POST':
+            form = BusinessContactFormForm(request.POST or None)
+            if form.is_valid():
+                form.save()
+                return HttpResponseRedirect('/mostrarNegocioformacontacto/'+ str(form.instance.pk))
+        else:
+            form = BusinessContactFormForm()
+        
 
+        titulo = "Negocio Forma Contacto"
+        context['form']= form
+        context["titulo"] = titulo
+        direccion = "polls/cargar.html"
+    
+    else:
+        context["titulo"] = "No autorizado"
+        direccion = "polls/unauthorized.html"
+        print("no user")
 
-    return render(request, "polls/cargar.html", context)
+    return render(request, direccion, context)
 
 
 def listarNegocioFormaContacto(request):
@@ -975,27 +1259,45 @@ def update_negocioformacontacto(request, id):
     # field names as keys
     context ={}
  
+    
+    if request.user.is_authenticated:
+        cliente = Client.objects.get(user__pk = request.user.id)
+        negocioFC = BusinessContactForm.objects.get(id = id)
+        negocio = Business.objects.get(id = negocioFC.negocio.id)
+        if negocio.cliente == cliente:
     # fetch the object related to passed id
-    obj = get_object_or_404(BusinessContactForm, id = id)
+            obj = get_object_or_404(BusinessContactForm, id = id)
+        
+            # pass the object as instance in form
+            form = BusinessContactFormForm(request.POST or None, instance = obj)
+        
+            # save the data from the form and
+            # redirect to detail_view
+            if form.is_valid():
+                form.save()
+                return HttpResponseRedirect("/mostrarNegocioAdd/"+ str(BusinessContactForm.objects.get(id = id).negocio_id) )
+                # return HttpResponseRedirect("/mostrarNegocioformacontacto/"+id)
+        
+            # add form dictionary to context
+            titulo = "Negocio Forma Contacto"
+            context["form"] = form
+            context["titulo"] = titulo
+            direccion = "polls/intermedio/updatenegocioformacontacto.html"
  
-    # pass the object as instance in form
-    form = BusinessContactFormForm(request.POST or None, instance = obj)
- 
-    # save the data from the form and
-    # redirect to detail_view
-    if form.is_valid():
-        form.save()
-        return HttpResponseRedirect("/mostrarNegocioAdd/"+ str(BusinessContactForm.objects.get(id = id).negocio_id) )
-        # return HttpResponseRedirect("/mostrarNegocioformacontacto/"+id)
- 
-    # add form dictionary to context
-    titulo = "Negocio Forma Contacto"
-    context["form"] = form
-    context["titulo"] = titulo
- 
-    return render(request, "polls/intermedio/updatenegocioformacontacto.html", context)
+        else:
+            context["titulo"] = "No autorizado"
+            direccion = "polls/unauthorized.html"
+            print("no user")
+    else:
+        context["titulo"] = "No autorizado"
+        direccion = "polls/unauthorized.html"
+        print("no user")
+
+    return render(request, direccion, context)
 
 
+
+# Esta funcion nunca la use
 def update_negocioformacontactomodal(request, id):
     # dictionary for initial data with
     # field names as keys
@@ -1027,22 +1329,39 @@ def delete_negocioformacontacto(request, id):
     # dictionary for initial data with
     # field names as keys
     context ={}
+    
+    if request.user.is_authenticated:
+        cliente = Client.objects.get(user__pk = request.user.id)
+        negocioFC = BusinessContactForm.objects.get(id = id)
+        negocio = Business.objects.get(id = negocioFC.negocio.id)
+        if negocio.cliente == cliente:
+            # fetch the object related to passed id
+            obj = get_object_or_404(Dayweek, id = id)
+        
+        
+            if request.method =="POST":
+                # delete object
+                obj.delete()
+                # after deleting redirect to
+                # home page
+                return HttpResponseRedirect("/listarNegocioformacontactos/")
+        
+            titulo = "Negocio Forma Contacto"
+            context["titulo"] = titulo
+            direccion = "polls/intermedio/deletenegocioformacontacto.html"
  
-    # fetch the object related to passed id
-    obj = get_object_or_404(Dayweek, id = id)
- 
- 
-    if request.method =="POST":
-        # delete object
-        obj.delete()
-        # after deleting redirect to
-        # home page
-        return HttpResponseRedirect("/listarNegocioformacontactos/")
- 
-    titulo = "Negocio Forma Contacto"
-    context["titulo"] = titulo
+        else:
+            context["titulo"] = "No autorizado"
+            direccion = "polls/unauthorized.html"
+            print("no user")
+    else:
+        context["titulo"] = "No autorizado"
+        direccion = "polls/unauthorized.html"
+        print("no user")
 
-    return render(request, "polls/intermedio/deletenegocioformacontacto.html", context)
+
+
+    return render(request, direccion, context)
 
 
 
@@ -1072,7 +1391,7 @@ def creditos(request):
 
 
 
-
+# Esta funcion no se usa
 def loguincito(request):
     return render(request, "polls/login.html")
 
@@ -1082,7 +1401,7 @@ def loguincito(request):
 
 from django.views.generic import TemplateView
 
-
+# Esta funcion se usa?
 class HomeView(LoginRequiredMixin, TemplateView):
     template_name = "home.html" 
 
@@ -1145,12 +1464,21 @@ def login_request(request):
 def perfil(request):
     context = {}
 
-    cliente = Client.objects.get(user__pk = request.user.id)
+    if request.user.is_authenticated:
+        cliente = Client.objects.get(user__pk = request.user.id)
 
-    context["cliente"] = cliente
+        context["cliente"] = cliente
+        direccion = "polls/perfilcliente.html"
+    else:
+        context["titulo"] = "No autorizado"
+        direccion = "polls/unauthorized.html"
+        print("no user")
 
-    return render(request, "polls/perfilcliente.html", context)
+    return render(request, direccion, context)
 
+# -----------------------------
+# Revisar estas dos funciones que siguen
+# -----------------------------
 def update_perfilCliente(request):
     # dictionary for initial data with
     # field names as keys
@@ -1241,13 +1569,17 @@ def buscar(request):
 # ---------------------------------Por rubro------------------------------------------ #
 def filtrarXRubros(request, id):
     context = {}
+    categorias = Heading.objects.all()
     rubro = Heading.objects.get(id = id)
     negocios = Business.objects.filter(rubros__id=id).order_by(Lower('nombre'))
 
-    context["dataset"] = negocios
+    context["negocios"] = negocios
     context["rubro"] = rubro
+    context["categorias"] = categorias
+    #direccion = "polls/busqueda/filtrarrubros.html"
+    direccion = "polls/inicio.html"
 
-    return render(request, "polls/busqueda/filtrarrubros.html", context)
+    return render(request, direccion , context)
 
 
 # ---------------------------------Por dia y horario--------------------------------------- #
@@ -1276,13 +1608,21 @@ def seleccionHorarios(request):
 
 def filtrarXHorario(request, diaSemana, horaAbre, horaCierra):
     context = {}
-
+    categorias = Heading.objects.all()
     negociosDia = Businesshourday.objects.filter(diaSemana__dia = diaSemana)
     # for neg in negociosDia:
     #     print(neg.negocio.nombre)
     #     print("por Dia")
 
     negociosHorario = negociosDia.filter(horaAbre__lte=horaAbre, horaCierra__gte=horaCierra).order_by(Lower('negocio__nombre'))
+    
+    negocios = []
+    for negH in negociosHorario:
+        for neg in Business.objects.all():
+            if negH.negocio == neg:
+                negocios.append(neg)
+
+    
     # for neg in negociosHorario:
     #     print("negocito")
     #     print(neg.negocio.nombre)
@@ -1294,11 +1634,17 @@ def filtrarXHorario(request, diaSemana, horaAbre, horaCierra):
     context["horaCierra"] = horaCierra
     context["dataset"] = negociosHorario
     context["negociosD"] = negociosDia
+    context["negocios"] = negocios
+    context["categorias"] = categorias
 
-    return render(request, "polls/busqueda/filtrarhorarios.html", context)
+
+    # direccion = "polls/busqueda/filtrarhorarios.html"
+    direccion = "polls/inicio.html"
+
+    return render(request, direccion, context)
 
 
-    # ---------------------------------Por dia y horario--------------------------------------- #
+    # ---------------------------------Buscar cliente--------------------------------------- #
 
 def buscarCliente(request):
     context = {}
