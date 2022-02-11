@@ -22,8 +22,22 @@
             </div>
             <div class="card-body">
 
-
                 <div class="mw-100 bg-light text-dark">
+                    <p><b>Contactar: </b></p>
+                </div>
+                <div class="row ">
+                    <div class="col-12 col-md-6 mb-3 d-flex justify-content-between">
+                    {% for contacto in contactos %}
+                                <a class="{{contacto.getColor}}" href="{{contacto.getEnlace}}">
+                                    <i class="{{contacto.getIcono}}"></i>
+                                </a>
+                    {% endfor %}
+                    </div>
+                </div>
+
+
+
+                <!-- <div class="mw-100 bg-light text-dark">
                     <p><b>Contactar: </b></p>
                 </div>
                 {% for contacto in contactos %}
@@ -50,7 +64,7 @@
                         </tbody>
                     </table>
                 </div>
-                {% endfor %}
+                {% endfor %} -->
 
                 <div class="mw-100 bg-light text-dark">
                     <p><b>Rubros: </b></p>

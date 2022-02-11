@@ -29,5 +29,8 @@
             </div>
         </div>
         <a class="navbar-brand" href="/">LSM Shop</a>
+        {% if user.is_authenticated %}
+            <a class="text-reset fw-bold" href="/salir"><i class="bi bi-box-arrow-right" style="font-size: 1.5rem;"></i></a>
+        {% endif %}
     </div>
 </nav>

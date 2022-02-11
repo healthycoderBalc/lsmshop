@@ -122,3 +122,30 @@ class BusinessContactForm(models.Model):
             enlace = 'desconocido'
         return enlace
 
+    def getIcono(self):
+        icono = ''
+        if (self.formaContacto.nombre == 'Facebook'):
+            icono = 'bi bi-facebook'
+        elif (self.formaContacto.nombre == 'Instagram'):
+            icono = 'bi bi-instagram'
+        elif (self.formaContacto.nombre == 'Llamada'):
+            icono = 'bi bi-telephone'
+        elif (self.formaContacto.nombre == 'WhatsApp'):
+            icono = 'bi bi-whatsapp'
+        else:
+            icono = 'bi bi-exclamation-triangle-fill'
+        return icono
+
+    def getColor(self):
+        color = ''
+        if (self.formaContacto.nombre == 'Facebook'):
+            color = 'btn btn-outline-primary'
+        elif (self.formaContacto.nombre == 'Instagram'):
+            color = 'btn btn-outline-dark'
+        elif (self.formaContacto.nombre == 'Llamada'):
+            color = 'btn btn-outline-secondary'
+        elif (self.formaContacto.nombre == 'WhatsApp'):
+            color = 'btn btn-outline-success'
+        else:
+            color = 'bi bi-exclamation-triangle-fill'
+        return color
