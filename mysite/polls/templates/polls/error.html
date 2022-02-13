@@ -1,0 +1,21 @@
+{% extends "polls/principal.html" %}
+
+{% block title %}
+<title>{{titulo}}</title>
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row text-center border border-5 rounded-3 d-flex align-items-center justify-content-center"
+        style="height: 100px;">
+        <p><b>Usuario NO registrado</b></p>
+        <p>El usuario no fue registrado. Por favor verifique los datos y vuelva a intentarlo</p>
+    </div>
+</div>
+<br>
+<div class="d-grid gap-2 d-md-block">
+    <a href="/" class="btn btn-outline-primary">Volver al inicio</a>
+</div>
+
+{% endblock %}

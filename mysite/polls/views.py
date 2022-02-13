@@ -35,7 +35,7 @@ def cargarCliente(request):
         # form.fields["user"].queryset = User.objects.filter(user_id=usuario.id)
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect('/mostrarCliente/'+ str(form.instance.pk))
+            return HttpResponseRedirect('/perfilCliente')
     else:
         form = ClientForm(user = request.user)
 
@@ -76,12 +76,28 @@ def mostrarCliente(request, id):
     context ={}
  
     titulo = "Cliente"
-    # add the dictionary during initialization
-    context["data"] = Client.objects.get(id = id)
-    context["titulo"] = titulo
+    if request.user.is_authenticated:
+        if request.user.is_staff:
+            negocios = Business.objects.filter(cliente__id = id).order_by(Lower('nombre'))
+
+
+            # add the dictionary during initialization
+            context["data"] = Client.objects.get(id = id)
+            context["negocios"] = negocios
+            context["titulo"] = titulo
+            direccion = "polls/cliente/mostrarcliente.html"
+        else:
+            context["titulo"] = "No autorizado"
+            direccion = "polls/unauthorized.html"
+            print("no staff")
+    else:
+        context["titulo"] = "No autorizado"
+        direccion = "polls/unauthorized.html"
+        print("no user")
 
          
-    return render(request, "polls/cliente/mostrarcliente.html", context)
+    return render(request, direccion, context)
+
 
 def update_cliente(request, id):
     # dictionary for initial data with
@@ -738,16 +754,19 @@ def administrarNegocios(request):
     context={}
 
     if request.user.is_authenticated:
-        cliente = Client.objects.get(user__pk = request.user.id)
-    # dataset = Business.objects.filter(cliente__id=id)
-        dataset = Business.objects.filter(cliente__id=cliente.id).order_by(Lower('nombre'))
-        titulo = "Mis Negocios"
-        # add the dictionary during initialization
-        context["dataset"] = dataset
-        context["titulo"] = titulo
-        context["cliente"] = cliente
-        # context["clientecito"] = Client.objects.get(id = id)
-        direccion = "polls/negocio/listarnegocioscliente.html"
+        if hasattr(request.user, 'client'):
+            cliente = Client.objects.get(user__pk = request.user.id)
+        # dataset = Business.objects.filter(cliente__id=id)
+            dataset = Business.objects.filter(cliente__id=cliente.id).order_by(Lower('nombre'))
+            titulo = "Mis Negocios"
+            # add the dictionary during initialization
+            context["dataset"] = dataset
+            context["titulo"] = titulo
+            context["cliente"] = cliente
+            # context["clientecito"] = Client.objects.get(id = id)
+            direccion = "polls/negocio/listarnegocioscliente.html"
+        else:
+            return redirect("polls:admCliente")
     else:
         context["titulo"] = "No autorizado"
         direccion = "polls/unauthorized.html"
@@ -767,7 +786,11 @@ def cargarNegocio(request):
             form = BusinessForm(request.POST or None, request.FILES, user = request.user)
             if form.is_valid():
                 form.save()
-                return HttpResponseRedirect('/mostrarNegocioAdd/'+ str(form.instance.pk))
+                if form.instance.suscripcion.nombre == 'Base':
+                    return HttpResponseRedirect('/mostrarNegocioAdd/'+ str(form.instance.pk))
+                else:
+                    nombre_suscripcion = form.instance.suscripcion.nombre
+                    return HttpResponseRedirect('/suscripcionPaga/'+ str(form.instance.pk))
         else:
             form = BusinessForm(user = request.user)
             
@@ -784,6 +807,24 @@ def cargarNegocio(request):
 
     return render(request, direccion, context)
 
+def suscripcionPaga(request, id):
+    context = {}
+    if request.user.is_authenticated:
+        negocio = Business.objects.get(id = id)
+        cliente = Client.objects.get(user =request.user)
+        if negocio.cliente == cliente:
+            context["data"] = negocio
+            direccion = "polls/suscripcion/suscripcionpaga.html"
+        else:
+            context["titulo"] = "No autorizado"
+            direccion = "polls/unauthorized.html"
+            print("no user")
+    else:
+        context["titulo"] = "No autorizado"
+        direccion = "polls/unauthorized.html"
+        print("no user")
+
+    return render(request, direccion, context)
 
 def listarNegocios(request):
     context ={}
@@ -1377,12 +1418,24 @@ def delete_negocioformacontacto(request, id):
 def principal(request):
 
     context ={}
-    titulo = "LSM Shop"
-    context["titulo"] = titulo
-    context["negocios"] = Business.objects.order_by(Lower('nombre'))
-    context["categorias"] = Heading.objects.all()
+    if request.user.is_authenticated:
+        # something
+        if hasattr(request.user, 'client'):
+            titulo = "LSM Shop"
+            context["titulo"] = titulo
+            context["negocios"] = Business.objects.order_by(Lower('nombre'))
+            context["categorias"] = Heading.objects.all()
+            direccion = "polls/inicio.html"
+        else:
+            return redirect("polls:admCliente")
+    else:
+        titulo = "LSM Shop"
+        context["titulo"] = titulo
+        context["negocios"] = Business.objects.order_by(Lower('nombre'))
+        context["categorias"] = Heading.objects.all()
+        direccion = "polls/inicio.html"
 
-    return render(request, "polls/inicio.html", context)
+    return render(request, direccion, context)
 
 
 def creditos(request):
@@ -1414,21 +1467,35 @@ class HomeView(LoginRequiredMixin, TemplateView):
 
 def registro(request):
 
+    context = {}
     if request.method == "POST":
         form = RegistroForm(request.POST)
         if form.is_valid():
+            print("form valido")
             usuario = form.save()
             nombre_usuario = form.cleaned_data.get('username')
+            print("guardado y sacado nombre de usuario " + nombre_usuario)
             messages.success(request, f"Nueva cuenta creada : {nombre_usuario}")
-            login(request, usuario)
-            # backend='django.contrib.auth.backends.ModelBackend'
+            login(request, usuario, backend='django.contrib.auth.backends.ModelBackend')
+            print("logueado") 
+            context["form"] = form
             return redirect("polls:admCliente")
         else:
+            print("form no valido")
             for msg in form.error_messages:
                 messages.error(request, f"{msg}: form.error_messages[msg]")
+            context["form"] = form
+            return redirect("polls:errorRegistro")
 
     form = RegistroForm()
-    return render(request, "polls/registrarse.html", {"form": form})
+    context["form"] = form
+    
+    return render(request, "polls/registrarse.html", context)
+
+def errorRegistro(request):
+    context = {}
+    return render(request, "polls/error.html", context)
+
 
 def salir(request):
     logout(request)
@@ -1436,7 +1503,7 @@ def salir(request):
 
 def entrar(request):
     if request.method == "POST":
-        form = AuthenticationForm(request, data=request.POST)
+        form = AutenticacionForm(request, data=request.POST)
         if form.is_valid():
             usuario = form.cleaned_data.get('username')
             contrasena = form.cleaned_data.get('password')
@@ -1450,7 +1517,7 @@ def entrar(request):
         else:
           messages.error(request, "Usuario o contraseña incorrecta")  
 
-    form = AuthenticationForm()
+    form = AutenticacionForm()
     return render(request, "polls/entrar.html", {"form": form})
 
 
@@ -1465,10 +1532,12 @@ def perfil(request):
     context = {}
 
     if request.user.is_authenticated:
-        cliente = Client.objects.get(user__pk = request.user.id)
-
-        context["cliente"] = cliente
-        direccion = "polls/perfilcliente.html"
+        if hasattr(request.user, 'client'):
+            cliente = Client.objects.get(user__pk = request.user.id)
+            context["cliente"] = cliente
+            direccion = "polls/perfilcliente.html"
+        else:
+            return redirect("polls:admCliente")
     else:
         context["titulo"] = "No autorizado"
         direccion = "polls/unauthorized.html"
@@ -1494,7 +1563,7 @@ def update_perfilCliente(request):
     # redirect to detail_view
     if form.is_valid():
         form.save()
-        return HttpResponseRedirect("/updateperfilUser")
+        return HttpResponseRedirect("/perfilCliente")
  
     # add form dictionary to context
     titulo = "Cliente"
@@ -1512,14 +1581,14 @@ def update_perfilUser(request):
     obj = get_object_or_404(User, pk = request.user.id)
  
     # pass the object as instance in form
-    form = PerfilForm(request.POST or None, instance = obj)
+    form = profileForm(request.POST or None, instance = obj)
  
     # save the data from the form and
     # redirect to detail_view
     if form.is_valid():
         form.save()
         print("valido")
-        return HttpResponseRedirect("/perfilCliente")
+        return HttpResponseRedirect("/updateperfilCliente")
     else:
         print("No valido")
  
@@ -1528,7 +1597,31 @@ def update_perfilUser(request):
     context["form"] = form
     context["titulo"] = titulo
  
-    return render(request, "polls/updateperfilUser.html", context)
+    return render(request, "polls/updateperfiluser.html", context)
+
+
+def delete_perfil(request):
+    # dictionary for initial data with
+    # field names as keys
+    context ={}
+ 
+    # fetch the object related to passed id
+    obj = get_object_or_404(User, pk = request.user.id)
+ 
+ 
+    if request.method =="POST":
+        # delete object
+        obj.delete()
+        # after deleting redirect to
+        # home page
+        return HttpResponseRedirect("/")
+ 
+    titulo = "Cliente"
+    context["titulo"] = titulo
+
+    return render(request, "polls/deleteperfil.html", context)
+
+
 
 
 

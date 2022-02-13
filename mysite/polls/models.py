@@ -31,7 +31,7 @@ class Client(models.Model):
 
 class Subscription(models.Model):
     nombre = models.CharField(max_length=200, unique=True)
-    precioMensual = models.FloatField()
+    precioMensual = models.FloatField(verbose_name='Precio Mensual')
     caracteristicas = models.CharField(max_length=200)
 
     def __str__(self):

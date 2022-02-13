@@ -1,0 +1,29 @@
+{% extends "polls/principal.html" %}
+
+{% block title %}
+<title>{{titulo}}</title>
+{% endblock %}
+
+{% block content %}
+
+
+
+
+<div class="row">
+    <div class="col-12 col-md-6 mb-3">
+        <div class="card">
+            <div class="card-body">
+                <span class="card-title">Suscripcion <b>{{data.suscripcion.nombre}}</b> para <b>{{ data.nombre }}</b></span>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2 d-md-block">
+                    <script src="https://www.mercadopago.com.ar/integrations/v1/web-payment-checkout.js"
+                        data-preference-id="59916779-f8cce260-9ef9-4954-8d45-c7e2ef2257a4" data-source="button">
+                        </script>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

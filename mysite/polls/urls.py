@@ -15,12 +15,14 @@ app_name='polls'
 urlpatterns = [
     #path('', views.index, name='index'),
     path('registrarse/', views.registro, name='registro'),
+    path('errorRegistro/', views.errorRegistro, name='errorRegistro'),
     path('salir/', views.salir, name='salir'),
     path('ingresar/', views.entrar, name='entrar'),
     path('unauthorized/', views.noAutorizado, name='unauthorized'),
     path('perfilCliente', views.perfil, name="perfilCliente"),
     path('updateperfilCliente/', views.update_perfilCliente, name="updateperfilCliente"),
     path('updateperfilUser/', views.update_perfilUser, name="updateperfilCliente"),
+    path('deletePerfil/', views.delete_perfil, name="deleteperfil"),
     path('', views.buscar, name='search_results'),
     path('listarClientes/', views.buscarCliente, name='search_resultsCliente'),
     path('negociosPorRubro/<id>', views.filtrarXRubros, name='filtrarXRubros'),
@@ -80,6 +82,7 @@ urlpatterns = [
 
     # --------------------Negocio------------------------------------------- #
      path('cargarNegocio/', views.cargarNegocio, name='cargarNegocio'),
+     path('suscripcionPaga/<id>', views.suscripcionPaga, name='suscripcionPaga'),
      path('listarNegocios/', views.listarNegocios, name='listarNegocios'),
      path('listarNegociosCliente/', views.administrarNegocios, name='administrarNegocios'),
      path('mostrarNegocio/<id>', views.mostrarNegocio, name='mostrarNegocio'),
