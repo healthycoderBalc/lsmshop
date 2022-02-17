@@ -9,12 +9,22 @@ https://docs.djangoproject.com/en/dev/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/dev/ref/settings/
 """
-import os
+
 from pathlib import Path
 import environ
+import os
+
+from dotenv import load_dotenv
+
+load_dotenv()
+
+env = environ.Env()
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+environ.Env.read_env()
+
 
 
 # Quick-start development settings - unsuitable for production
@@ -22,6 +32,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-53th1vs%k)j1(q-j%z95yvs%!ls24%q0-2tt!3=#f7!z*n#b61'
+# SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -150,11 +161,13 @@ AUTHENTICATION_BACKENDS = (
     # 'social_core.backends.google.GooglePlusAuth',
 )
 
-SOCIAL_AUTH_FACEBOOK_KEY = '963275077611461' 
-SOCIAL_AUTH_FACEBOOK_SECRET = '48aec68f91cbc7fef8cd900fae774fed' 
+SOCIAL_AUTH_FACEBOOK_KEY = 963275077611461
+# SOCIAL_AUTH_FACEBOOK_KEY = env('SOCIAL_AUTH_FACEBOOK_KEY')
+SOCIAL_AUTH_FACEBOOK_SECRET ="64bd6ee74424038a29c55aaa244ec542"
+# SOCIAL_AUTH_FACEBOOK_SECRET = env("SOCIAL_AUTH_FACEBOOK_SECRET")
 
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '227947446841-4g2fhgets7n0slto0ntf2pq4a18uvpen.apps.googleusercontent.com'
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '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'
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = env("SOCIAL_AUTH_GOOGLE_OAUTH2_KEY")
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = env("SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET")
 
 
 
@@ -176,8 +189,8 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # env = environ.Env()
 # env.read_env(str(BASE_DIR / ".env"))
-# MERCADO_PAGO_PUBLIC_KEY = 'TEST-c4d94392-ca55-4d12-92b2-a032894bd811'
-# MERCADO_PAGO_ACCESS_TOKEN = 'TEST-1185589474711560-021314-b962253950bd1b0bf9453062bd67904d-59916779'
+# MERCADO_PAGO_PUBLIC_KEY = env("MERCADO_PAGO_PUBLIC_KEY")
+# MERCADO_PAGO_ACCESS_TOKEN = env("MERCADO_PAGO_ACCESS_TOKEN")
 
 
 #vendedor de prueba 

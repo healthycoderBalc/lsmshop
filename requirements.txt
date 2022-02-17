@@ -20,8 +20,21 @@ tomli==1.2.2
 tzdata==2021.5
 virtualenv==20.12.1
 
+social-auth-app-django
+python-social-auth
+django-crispy-forms
+django-bootstrap-datepicker-plus
+typing-extensions
+windows-curses
+attrs
+ipywidgets
+
+
+
 # Mercado pago?
 mercadopago==2.0.6
 django-environ==0.4.5
 pytest-mock==3.5.1
 requests==2.25.1
+
+python-dotenv
