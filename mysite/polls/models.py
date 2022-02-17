@@ -1,7 +1,8 @@
 from enum import unique
 from django.db import models
-from django.db.models.fields import EmailField
+from django.db.models.fields import EmailField, DateField
 from django.contrib.auth.models import User
+
 
 
 class Client(models.Model):
@@ -36,6 +37,8 @@ class Subscription(models.Model):
 
     def __str__(self):
         return self.nombre
+
+
      
 class Dayweek(models.Model):
     dia = models.CharField(max_length=200, unique=True)
@@ -66,11 +69,31 @@ class Business(models.Model):
     rubros = models.ManyToManyField(Heading, through='BusinessArea')
     formasContacto = models.ManyToManyField(ContactForm, through='BusinessContactForm')
     diasSemana = models.ManyToManyField(Dayweek, through='Businesshourday')
+    paid = models.BooleanField(default=False, verbose_name="Destacado - Mes pagado")
+    fecha_ultimo_pago = models.DateField('Fecha ultimo pago', blank=True, null=True)
 
     def __str__(self):
         return self.nombre
 
+    def get_price(self):
+        price = self.suscripcion.precioMensual
+        return price
+    def get_description(self):
+        descripcionN = self.nombre
+        descripcionS = self.suscripcion.nombre
+        descripcionPM = self.suscripcion.precioMensual
+        return str(descripcionN) + "; Suscripción: " + str(descripcionS) + " $" + str(descripcionPM)
 
+    def get_paid(self):
+        pagado = ''
+        if not (self.paid):
+            if self.suscripcion.nombre == 'Base':
+                pagado = 'Suscripción gratuita'
+            else:
+                pagado = 'Pendiente de pago'
+        else:
+            pagado = 'Pagada'
+        return pagado
 
 class Businesshourday(models.Model):
     negocio = models.ForeignKey(Business, on_delete=models.CASCADE)
@@ -149,3 +172,53 @@ class BusinessContactForm(models.Model):
         else:
             color = 'bi bi-exclamation-triangle-fill'
         return color
+
+# from datetime import datetime
+from datetime import date, timedelta
+
+class Pago(models.Model):
+    negocio = models.ForeignKey(Business, on_delete=models.CASCADE)
+    estado = models.CharField(max_length=250)
+    fechaUltimoPago = models.DateField(default=date.today, verbose_name='Fecha Ultimo Pago', blank=True)
+    
+
+    def __str__(self):
+        # return self.negocio.nombre
+        return f"{self.negocio.nombre} - {self.fechaUltimoPago}"
+    
+    def get_month_number(self):
+        month = self.fechaUltimoPago.month
+
+        return month
+    def get_month_name(self):
+        month = self.fechaUltimoPago('%B')
+        return month
+
+
+
+
+# from model_utils.models import TimeStampedModel
+
+
+
+
+
+# Mercado Pago
+# class Payment(TimeStampedModel):
+#     business = models.ForeignKey(Business, related_name="payments", on_delete=models.CASCADE)
+#     transaction_amount = models.DecimalField(
+#         "Valor de la transaccion", max_digits=10, decimal_places=2
+#     )
+#     installments = models.IntegerField("Cuotas")
+#     payment_method_id = models.CharField("Forma de pago", max_length=250)
+#     email = models.EmailField()
+#     doc_number = models.CharField("DNI", max_length=250)
+#     mercado_pago_id = models.CharField(max_length=250, blank=True, db_index=True)
+#     mercado_pago_status = models.CharField(max_length=250, blank=True)
+#     mercado_pago_status_detail = models.CharField(max_length=250, blank=True)
+
+#     class Meta:
+#         ordering = ("-modified",)
+
+#     def __str__(self):
+#         return f"Pago {self.id}"

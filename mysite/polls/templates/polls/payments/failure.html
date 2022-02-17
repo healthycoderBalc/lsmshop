@@ -1,0 +1,28 @@
+{% extends "polls/principal.html" %}
+
+{% block title %}Error{% endblock %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-12 col-md-6 mb-3">
+        <div class="card">
+            <div class="card-body text-center">
+                <h1 class="card-title font-weight-bold text-danger">Pago no realizado</h1>
+                    <h1><i class="bi bi-emoji-frown text-danger"></i></h1>
+                <p class="card-text">Algo ocurrió y el pago no fue realizado. Intente nuevamente.
+                    Si el error persiste, entre en contacto con nosotros.</p>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2 d-md-block">
+                    <a class="btn btn-success" href="/process/{{negocio.id}}">
+                        Intentar Nuevamente</a>
+                    <a href="/listarNegociosCliente/"
+                        class="btn btn-primary"><small>Volver a <i>Mis Negocios</i></small></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -70,6 +70,8 @@ class BusinessForm(forms.ModelForm):
         super(BusinessForm, self).__init__(*args, **kwargs)
         self.fields['cliente'].queryset = Client.objects.filter(user = self.user)
         print(self.fields['cliente'].queryset)
+        self.fields["paid"].disabled = True
+        self.fields["fecha_ultimo_pago"].disabled = True
 
 
 
@@ -180,3 +182,4 @@ class profileForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['username', 'first_name', 'last_name', 'email']
+

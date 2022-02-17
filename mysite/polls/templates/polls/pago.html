@@ -1,0 +1,57 @@
+{% extends "polls/principal.html" %}
+
+{% load static %}
+
+{% block title %}Pago con tarjeta de crédito{% endblock %}
+
+{% block content %}
+
+
+<div class="container">
+    <h1 class="font-weight-bold">Paga tu suscripción</h1>
+    <div class="row">
+        <div class="col-12 cor-md-6 mb-3">
+            <div class="card">
+                <div class="card-header justify-content-end">
+                    <span class="card-title font-weight-bold"><b>Negocio: {{ negocio.nombre }}</b></span>
+                </div>
+                <div class="card-body">
+                    <p>Suscripción: {{negocio.suscripcion.nombre}}</p>
+                    <p>Valor a pagar: {{negocio.suscripcion.precioMensual}}</p>
+                    <p>Descripción de la suscripción: {{negocio.suscripcion.caracteristicas}}</p>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2 d-md-block">
+                        <div class="cho-container"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+
+
+<!-- SDK MercadoPago.js V2 -->
+<script src="https://sdk.mercadopago.com/js/v2"></script>
+<script>
+    // Agrega credenciales de SDK
+    const mp = new MercadoPago("APP_USR-6eb7add2-a62a-4312-a74f-06c1e9646fc3", {
+        locale: "es-AR",
+    });
+
+    // Inicializa el checkout
+    mp.checkout({
+        preference: {
+            id: "{{preference.id}}",
+        },
+        render: {
+            container: ".cho-container", // Indica el nombre de la clase donde se mostrará el botón de pago
+            label: "Pagar", // Cambia el texto del botón de pago (opcional)
+        },
+    });
+</script>
+
+{% endblock %}

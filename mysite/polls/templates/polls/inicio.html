@@ -30,12 +30,26 @@
     <option selected>Filtrar por</option>
     <optgroup label="Rubro">
         {% for cat in categorias %}
-            <option value="/negociosPorRubro/{{cat.id}}">{{cat.nombre}}</option>
+        <option value="/negociosPorRubro/{{cat.id}}">{{cat.nombre}}</option>
         {% endfor %}
     </optgroup>
     <option value="/seleccionHorarios">Horario</option>
+    {% if rubro or dia %}
+        <option value="/">Mostrar todos</option>
+    {% endif %}
 </select>
-<br>
+
+
+<!-- ################# -->
+<!-- Boton para mostrar todos los negocios tras busqueda -->
+<!-- ################# -->
+
+{% if query != None or rubro or dia %}
+<div class="d-grid gap-2 d-md-block">
+    <a href="/" class="btn btn-outline-success">Mostrar todos los negocios</a>
+</div>
+<!-- <br> -->
+{% endif %}
 
 
 
@@ -46,7 +60,7 @@
         <p>Negocios del rubro <b>{{rubro.nombre}}</b></p>
     </div>
 </div>
-<br>
+<!-- <br> -->
 {% endif %}
 
 {% if dia %}
@@ -57,33 +71,86 @@
         <p>Entre {{horaAbre}} y {{horaCierra}}</p>
     </div>
 </div>
-<br>
+<!-- <br> -->
 {% endif %}
 
-
+<br>
 <!-- ################# -->
 <!-- Lista de negocios -->
 <!-- ################# -->
 
+<!-- Lista de negocios Destacados -->
 <div class="row">
-    {% for neg in negocios %}
+    <h4 class="bg bg-light">Negocios destacados: </h4>
+    {% for neg in negociosPaid %}
     <div class="col-6 col-md-4 mb-3">
-
-        <div class="card h-100">
-            <!-- <div class="card-header justify-content-end"> -->
-                <!-- <i class="bi-heart" style="font-size: 1rem"></i> -->
-            <!-- </div> -->
+        <div class="card-header">
+            <i class="bi bi-star text-warning"></i>
+        </div>
+        <div class="card h-80">
             <div class="card">
                 <img src="{{ neg.fotoNegocio.url }}" class="card-img-top" />
             </div>
             <div class="card-body">
-                    <span class="card-title">
-                        <b>{{ neg.nombre }}</b>
-                    </span>
-                <!-- <p class="card-text">{{ neg.direccion }}</p> -->
+                <span class="card-title">
+                    <b>{{ neg.nombre }}</b>
+                </span>
+                <a href="/mostrarNegocio/{{neg.id}}" class="btn btn-primary">Ver</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+<hr class="mt-1 mb-3 text-dark" style="border: 2px solid"/>
+
+
+
+
+<!-- Lista de negocios Base -->
+<!-- <div class="row">
+    {% for neg in negociosBase %}
+    <div class="col-6 col-md-4 mb-3">
+
+        <div class="card h-100">
+            <div class="card">
+                <img src="{{ neg.fotoNegocio.url }}" class="card-img-top" />
+            </div>
+            <div class="card-body">
+                <span class="card-title">
+                    <b>{{ neg.nombre }}</b>
+                </span>
             </div>
             <div class="card-body">
                 <a href="/mostrarNegocio/{{neg.id}}" class="btn btn-primary">Ver</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<hr>
+<p>base</p> -->
+<!-- Lista de TODOS los negocios -->
+
+
+<div class="row">
+    <h4 class="bg bg-light">Todos los negocios: </h4>
+    {% for neg in negocios %}
+    <div class="col-6 col-md-4 mb-3">
+
+        <div class="card h-100">
+            <div class="card">
+                <img src="{{ neg.fotoNegocio.url }}" class="card-img-top" />
+            </div>
+            <div class="card-body">
+                <span class="card-title">
+                    <b>{{ neg.nombre }}</b>
+                </span>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2 d-md-block">
+                    <a href="/mostrarNegocio/{{neg.id}}" class="btn btn-primary">Ver</a>
+                </div>
             </div>
         </div>
     </div>

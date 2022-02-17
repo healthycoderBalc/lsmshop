@@ -7,6 +7,15 @@ from django.conf import settings
 from django.conf.urls.static import static
 from .views import *
 
+# mercado pago
+# from .views import (
+#     PaymentCreateView,
+#     PaymentFailureView,
+#     PaymentPendingView,
+#     PaymentSuccessView,
+#     payment_webhook,
+# )
+
 
 
 
@@ -89,7 +98,7 @@ urlpatterns = [
      path('mostrarNegocioAdd/<id>', views.mostrarNegocioAdd, name='mostrarNegocioAdd'),
      path('updateNegocio/<id>', views.update_negocio, name='update_negocio'),
      path('deleteNegocio/<id>', views.delete_negocio, name='delete_negocio'),
-     
+     path('quitarSuscripciones/', views.downgradeBusinesses, name='quitarSuscripciones'),
     
     # --------------------NegocioHoraDia------------------------------------------- #
      path('cargarNegocioHoraDia/', views.cargarNegocioHoraDia, name='cargarNegocioHoraDia'),
@@ -117,6 +126,15 @@ urlpatterns = [
      path('deleteNegocioformacontacto/<id>', views.delete_negocioformacontacto, name='delete_negocioformacontacto'),
 
 
+
+    # --------------------NegocioFormaContacto------------------------------------------- #
+
+
+    path("process/<id>", views.pago, name="process"),
+    path("failure/<id>", views.failure, name="failure"),
+    path("pending/<id>", views.pending, name="pending"),
+    path("success/<id>", views.success, name="success"),
+    # path("webhook/", payment_webhook, name="webhook"),
  
 ]
 

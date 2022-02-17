@@ -1,0 +1,31 @@
+{% extends "polls/principal.html" %}
+
+{% block title %}
+<title>{{titulo}}</title>
+{% endblock %}
+
+{% block content %}
+
+<div class="row">
+    {% for neg in negocios %}
+
+    <div class="col-12 col-md-6 mb-3">
+        <div class="card">
+            <div class="card-body">
+                <span class="card-title">{{ neg.nombre}} {{ neg.suscripcion.nombre }}</span>
+                <p>{{neg.get_paid}}</p>
+                <p>{{neg.fecha_ultimo_pago}}</p>
+            </div>
+            <div class="card-body">
+                <a href="/mostrarNegocio/{{neg.id}}" class="btn btn-primary">Ver</a>
+            </div>
+
+        </div>
+    </div>
+
+    {% endfor %}
+</div>
+
+
+
+{% endblock %}

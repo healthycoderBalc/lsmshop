@@ -13,5 +13,4 @@ admin.site.register(Business)
 admin.site.register(Businesshourday)
 admin.site.register(BusinessArea)
 admin.site.register(BusinessContactForm)
-
-
+admin.site.register(Pago)

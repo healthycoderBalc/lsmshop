@@ -54,9 +54,21 @@
                 {% endif %}
                 {% endfor %}
 
+                <p><b>Suscripción: </b></p>
+                <p>{{data.suscripcion.nombre}}:
+                    {{ data.get_paid }}
+                </p>
+
+
+
             </div>
             <div class="card-body">
                 <div class="d-grid gap-2 d-md-block">
+                    {% if not data.paid %}
+                        {% if data.suscripcion.nombre != "Base" %}
+                            <a href="/process/{{data.id}}" class="btn btn-outline-danger">Pagar suscripcion</a>
+                        {% endif %}
+                    {% endif %}
                     <a href="/listarNegociosCliente/" class="btn btn-outline-primary">Volver</a>
                     <a href="/updateNegocio/{{data.id}}" class="btn btn-primary">Modificar</a>
                     <a href="/deleteNegocio/{{data.id}}" class="btn btn-danger">Eliminar</a>

@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/dev/ref/settings/
 """
 import os
 from pathlib import Path
+import environ
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -42,6 +43,7 @@ INSTALLED_APPS = [
     'social_django',
     'crispy_forms',
     'bootstrap_datepicker_plus',
+    "django_extensions",
    ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
@@ -168,3 +170,16 @@ LOGOUT_REDIRECT_URL = 'polls:principal'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+
+# Mercado Pago
+
+# env = environ.Env()
+# env.read_env(str(BASE_DIR / ".env"))
+# MERCADO_PAGO_PUBLIC_KEY = 'TEST-c4d94392-ca55-4d12-92b2-a032894bd811'
+# MERCADO_PAGO_ACCESS_TOKEN = 'TEST-1185589474711560-021314-b962253950bd1b0bf9453062bd67904d-59916779'
+
+
+#vendedor de prueba 
+MERCADO_PAGO_PUBLIC_KEY = 'APP_USR-6eb7add2-a62a-4312-a74f-06c1e9646fc3'
+MERCADO_PAGO_ACCESS_TOKEN = 'APP_USR-8847563472531392-021522-a4381f0595bf90e0ee6fa3b952f7d988-1075035405'

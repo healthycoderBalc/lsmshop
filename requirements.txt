@@ -19,3 +19,9 @@ sqlparse==0.4.1
 tomli==1.2.2
 tzdata==2021.5
 virtualenv==20.12.1
+
+# Mercado pago?
+mercadopago==2.0.6
+django-environ==0.4.5
+pytest-mock==3.5.1
+requests==2.25.1

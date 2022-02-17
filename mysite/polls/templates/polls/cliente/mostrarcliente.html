@@ -41,6 +41,7 @@
                                 <b>{{ neg.nombre }}</b>
                             </span>
                             <p class="card-text"><i class="bi bi-wallet2"></i> {{ neg.suscripcion.nombre }}</p>
+                            <p class="card-text"><i class="bi bi-credit-card"></i> {{ neg.get_paid }}</p>
                             <!-- <p class="card-text">{{ neg.direccion }}</p> -->
                             <div class="d-grid gap-2 d-md-block">
                                 <a href="/mostrarNegocio/{{neg.id}}" class="btn btn-outline-success">Ver</a>

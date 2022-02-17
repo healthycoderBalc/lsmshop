@@ -1,0 +1,26 @@
+{% extends "polls/principal.html" %}
+
+{% block title %}Exitoso!{% endblock %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-12 col-md-6 mb-3">
+        <div class="card">
+            <div class="card-body text-center">
+                <h1 class="card-title font-weight-bold">Estamos processando su pago</h1>
+                    <h1><i class="bi bi-arrow-repeat"></i></h1>
+                <p class="card-text">Gracias por pagar su suscripcion.
+                    En unos días verá reflejado su pago.</p>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2 d-md-block">
+                    <a href="/listarNegociosCliente/"
+                        class="btn btn-primary"><small>Volver a <i>Mis Negocios</i></small></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
