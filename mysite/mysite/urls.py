@@ -17,10 +17,13 @@ Including another URLconf
 
 
 from django.contrib import admin
-from django.urls import include, path, re_path
-from . import settings
+from django.urls import include, path
+# from django.urls import re_path as url
+
+from .settings import base
 from django.contrib.staticfiles.urls import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+from django.views.generic import TemplateView
 
 
 
@@ -30,14 +33,19 @@ urlpatterns = [
     path('admin/', admin.site.urls),
      # Python Social Auth URLs 
     path('', include('social.apps.django_app.urls', namespace='social')),
+    path('', include('pwa.urls')),
+    path('serviceworker', (TemplateView.as_view(
+      template_name="browsepages/serviceworker.js", 
+      content_type='application/javascript',)), 
+      name='serviceworker'),
 ]
 
 
     # Python Social Auth URLs 
 
 
-if settings.DEBUG:
+if base.DEBUG:
         urlpatterns += staticfiles_urlpatterns()
-        urlpatterns += static(settings.MEDIA_URL,
-                              document_root=settings.MEDIA_ROOT)
+        urlpatterns += static(base.MEDIA_URL,
+                              document_root=base.MEDIA_ROOT)
         

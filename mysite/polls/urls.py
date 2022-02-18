@@ -136,5 +136,11 @@ urlpatterns = [
     path("success/<id>", views.success, name="success"),
     # path("webhook/", payment_webhook, name="webhook"),
  
+
+    # path('serviceworker', (TemplateView.as_view(
+    #   template_name="browsepages/serviceworker.js", 
+    #   content_type='application/javascript',)), 
+    #   name='serviceworker'),
+
 ]
 

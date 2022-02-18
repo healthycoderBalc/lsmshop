@@ -1,0 +1,28 @@
+{% extends "polls/principal.html" %}
+{% block title %}
+<title>{{titulo}}</title>
+{% endblock %}
+
+<!-- este es el que pasa a sw -->
+
+{% block content %}
+{% load static %}
+
+
+
+<div class="container">
+    <div class="row text-center border border-5 rounded-3 d-flex align-items-center justify-content-center"
+        style="height: 100px;">
+            <h2>No tienes internet, por favor revisa tu conexion</h2>
+
+            
+            <!-- <img src="/images/button.png" style="width:50%; height:50%"> -->
+    </div>
+    <div class="row text-center d-flex align-items-center justify-content-center">
+        <img src="static/pwa/img/AyM-internet.png" />
+    </div>
+
+</div>
+
+
+{% endblock %}
