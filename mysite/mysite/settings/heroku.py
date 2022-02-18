@@ -1,4 +1,4 @@
-
+from mysite.settings.base import *
 import environ
 
 from mysite.settings.base import *
