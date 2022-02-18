@@ -75,7 +75,7 @@ MIDDLEWARE= [
     'social_django.middleware.SocialAuthExceptionMiddleware',
 ]
 
-ROOT_URLCONF= 'mysite.urls'
+ROOT_URLCONF= 'mysite.mysite.urls'
 
 TEMPLATES= [
     {
